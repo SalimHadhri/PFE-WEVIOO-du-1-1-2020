@@ -102,7 +102,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/service/searches/addSearch").permitAll()
                 .antMatchers("/service/searches/deleteSearch/{id}").permitAll()
                 .antMatchers("/service/searches/updateSearch/{id}").permitAll()
-                .antMatchers("/service/searches/findSearch/{id}").permitAll();
+                .antMatchers("/service/searches/findSearch/{id}").permitAll()
+                .antMatchers("/service/searches/StartOrStopSearch/{id}").permitAll();
 
     }
     @Bean

@@ -1,6 +1,8 @@
 package com.wsourcing.Services.Searches.resource;
 
 
+import com.wsourcing.Services.Accounts.exception.AccountNotFoundException;
+import com.wsourcing.Services.Accounts.model.Account;
 import com.wsourcing.Services.Searches.exception.SearchNotFoundException;
 import com.wsourcing.Services.Searches.model.Search;
 import com.wsourcing.Services.Searches.repository.DatabaseSequenceSearchRepository;
@@ -65,6 +67,22 @@ public class SearchController {
             search.setId(search1.getId());
             searchRepository.save(search);
         }
+    }
+
+    @PutMapping(value = "/StartOrStopSearch/{id}")
+    public void StartOrStopSearch(@PathVariable int id) throws SearchNotFoundException {
+
+        Search search = searchRepository.findById(id) ;
+        if (search == null) {
+            throw new SearchNotFoundException("the account with id "+id+" don't exist") ;
+        }
+        if(search.isHalted() == true){
+            search.setHalted(false);
+        }
+        else{
+            search.setHalted(true);
+        }
+        searchRepository.save(search);
     }
 
 }
