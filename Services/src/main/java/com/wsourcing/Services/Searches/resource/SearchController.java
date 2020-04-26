@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin()
@@ -74,7 +75,7 @@ public class SearchController {
 
         Search search = searchRepository.findById(id) ;
         if (search == null) {
-            throw new SearchNotFoundException("the account with id "+id+" don't exist") ;
+            throw new SearchNotFoundException("the search with id "+id+" don't exist") ;
         }
         if(search.isHalted() == true){
             search.setHalted(false);
@@ -85,4 +86,48 @@ public class SearchController {
         searchRepository.save(search);
     }
 
+    public List<Search> findSearchList(String organisme){
+
+        List<Search> searches = searchRepository.findAll();
+        List<Search> seachesOrganisme = new ArrayList<>();
+
+        for (int i =0 ; i<searches.size();i++){
+
+            if ( searches.get(i).getOrganisme().equals(organisme)){
+                seachesOrganisme.add(searches.get(i));
+            }
+        }
+        return seachesOrganisme ;
+    }
+
+    @GetMapping(value = "/findPrioritisedSearch/{organisme}")
+    public Search findPrioritisedSearch(@PathVariable String organisme) throws SearchNotFoundException {
+
+        List<Search> searches = this.findSearchList(organisme) ;
+        if (searches == null) {
+            throw new SearchNotFoundException("No searches for this organism") ;
+        }
+
+        List<Search> seachesInWork = new ArrayList<>();
+
+        for (int i =0 ; i<searches.size();i++){
+
+            if ( searches.get(i).isHalted()==false){
+                seachesInWork.add(searches.get(i)) ;
+            }
+        }
+
+        Search search = seachesInWork.get(0);
+        int urgency = seachesInWork.get(0).getUrgency() ;
+
+        for (int i =1 ; i<seachesInWork.size();i++){
+
+            if (seachesInWork.get(i).getUrgency()>urgency){
+                urgency= seachesInWork.get(i).getUrgency() ;
+                search= seachesInWork.get(i) ;
+            }
+        }
+
+        return search ;
+    }
 }

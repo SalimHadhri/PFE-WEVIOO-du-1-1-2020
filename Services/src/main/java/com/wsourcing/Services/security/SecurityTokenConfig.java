@@ -66,6 +66,8 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/searches/deleteSearch/{id}").hasAnyRole("ADMIN","MANAGER")
                 .antMatchers("/searches/updateSearch/{id}").hasRole("ADMIN")
                 .antMatchers("/searches/findSearch/{id}").hasRole("USER")
+                .antMatchers("/searches/StartOrStopSearch/{id}").hasRole("ADMIN")
+                .antMatchers("/searches/findPrioritisedSearch/{organisme}").hasRole("ADMIN")
                 .anyRequest().authenticated() ;
     }
 

@@ -26,10 +26,13 @@ public class Search {
     private int totalProfilesScraped ;
     private int urgency ;
 
+    private String organisme ;
+
     public Search() {
     }
 
-    public Search(long id, String searchName, ArrayList<String> mandatorySkills, ArrayList<String> optionalSkills, boolean isHalted, int totalURLsFound, int totalNewUrls, int totalDistinctURLs, int totalProfilesScraped, int urgency) {
+
+    public Search(long id, String searchName, ArrayList<String> mandatorySkills, ArrayList<String> optionalSkills, boolean isHalted, int totalURLsFound, int totalNewUrls, int totalDistinctURLs, int totalProfilesScraped, int urgency, String organisme) {
         this.id = id;
         this.searchName = searchName;
         this.mandatorySkills = mandatorySkills;
@@ -40,9 +43,10 @@ public class Search {
         this.totalDistinctURLs = totalDistinctURLs;
         this.totalProfilesScraped = totalProfilesScraped;
         this.urgency = urgency;
+        this.organisme = organisme;
     }
 
-    public Search(String searchName, ArrayList<String> mandatorySkills, ArrayList<String> optionalSkills, boolean isHalted, int totalURLsFound, int totalNewUrls, int totalDistinctURLs, int totalProfilesScraped, int urgency) {
+    public Search(String searchName, ArrayList<String> mandatorySkills, ArrayList<String> optionalSkills, boolean isHalted, int totalURLsFound, int totalNewUrls, int totalDistinctURLs, int totalProfilesScraped, int urgency, String organisme) {
         this.searchName = searchName;
         this.mandatorySkills = mandatorySkills;
         this.optionalSkills = optionalSkills;
@@ -52,6 +56,16 @@ public class Search {
         this.totalDistinctURLs = totalDistinctURLs;
         this.totalProfilesScraped = totalProfilesScraped;
         this.urgency = urgency;
+        this.organisme = organisme;
+    }
+
+
+    public String getOrganisme() {
+        return organisme;
+    }
+
+    public void setOrganisme(String organisme) {
+        this.organisme = organisme;
     }
 
     public ArrayList<String> getMandatorySkills() {
