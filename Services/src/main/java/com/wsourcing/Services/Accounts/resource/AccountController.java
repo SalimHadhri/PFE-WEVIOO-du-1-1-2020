@@ -156,6 +156,21 @@ public class AccountController {
     }
 
 
+    @GetMapping(value = "/workingAccountsList")
+    public  List<Account> workingAccountsList() {
+        List<Account> accounts = accountRepository.findAll();
+        List<Account> workingAccounts = new ArrayList<>();
+
+        for (int i = 0 ; i<accounts.size();i++){
+            if (accounts.get(i).getEtat().equals("En Marche")){
+                workingAccounts.add(accounts.get(i));
+            }
+
+        }
+        return workingAccounts;
+    }
+
+
     @GetMapping(value = "/orderedNbrScrapingAccounts/{min}/{max}")
     public List<Account> orderedNbrScrapingAccounts(@PathVariable int min, @PathVariable int max) throws AccountNotFoundException{
     if(min==0){
