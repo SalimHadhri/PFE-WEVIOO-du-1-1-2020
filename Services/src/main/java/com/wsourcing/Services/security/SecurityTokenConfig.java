@@ -42,6 +42,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterAfter(new JwtTokenAuthenticationFilter(config),
                         UsernamePasswordAuthenticationFilter.class)
+                //accounts
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/accounts/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/accounts/**").permitAll()
@@ -57,6 +58,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/accounts/nbrAccountsInWork").permitAll()
                 .antMatchers("/accounts/orderedNbrScrapingAccounts/{min}/{max}").hasRole("ADMIN")
                 .antMatchers("/accounts/updateStatus/{id}").hasRole("ADMIN")
+                //searches
                 .antMatchers(HttpMethod.POST,"/searches/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/searches/**").permitAll()
                 .antMatchers(HttpMethod.DELETE,"/searches/**").permitAll()
@@ -68,6 +70,15 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/searches/findSearch/{id}").hasRole("USER")
                 .antMatchers("/searches/StartOrStopSearch/{id}").hasRole("ADMIN")
                 .antMatchers("/searches/findPrioritisedSearch/{organisme}").hasRole("ADMIN")
+                //profiles
+                .antMatchers(HttpMethod.POST,"/profiles/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/profiles/**").permitAll()
+                .antMatchers(HttpMethod.DELETE,"/profiles/**").permitAll()
+                .antMatchers(HttpMethod.PUT,"/profiles/**").permitAll()
+                .antMatchers("/profiles/addProfile").hasRole("ADMIN")
+                .antMatchers("/profiles/listProfiles").permitAll()
+                .antMatchers("/profiles/updateProfile/{id}").hasRole("ADMIN")
+                .antMatchers("/profiles/deleteProfile/{id}").hasRole("ADMIN")
                 .anyRequest().authenticated() ;
     }
 

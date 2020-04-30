@@ -105,7 +105,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/service/searches/findSearch/{id}").permitAll()
                 .antMatchers("/service/searches/StartOrStopSearch/{id}").permitAll()
                 .antMatchers("/service/searches/StartOrStopSearch/{id}").hasRole("ADMIN")
-                .antMatchers("/service/searches/findPrioritisedSearch/{organisme}").hasRole("ADMIN");
+                .antMatchers("/service/searches/findPrioritisedSearch/{organisme}").hasRole("ADMIN")
+                //profiles
+                .antMatchers("/service/profiles/addProfile").hasRole("ADMIN")
+                .antMatchers("/service/profiles/listProfiles").permitAll()
+                .antMatchers("/service/profiles/findProfile/{id}").hasRole("MANAGER")
+                .antMatchers("/service/profiles/updateProfile/{id}").hasRole("ADMIN")
+                .antMatchers("/service/profiles/deleteProfile/{id}").hasRole("ADMIN")
+
+
+        ;
+        ;
 
     }
     @Bean
