@@ -79,6 +79,9 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profiles/listProfiles").permitAll()
                 .antMatchers("/profiles/updateProfile/{id}").hasRole("ADMIN")
                 .antMatchers("/profiles/deleteProfile/{id}").hasRole("ADMIN")
+                ///Searches
+                .antMatchers("/profiles/SearchAll/{min}/{max}/{tunisia}").permitAll()
+
                 .anyRequest().authenticated() ;
     }
 

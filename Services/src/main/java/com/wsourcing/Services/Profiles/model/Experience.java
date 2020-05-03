@@ -7,14 +7,22 @@ public class Experience {
 
     private List<Job> jobs ;
     private List<Education> education ;
-    private ArrayList<String>  volunteering ;
+    private ArrayList<Volunteer>  volunteering ;
 
     public Experience() {
     }
 
-    public Experience(List<Job> jobs, List<Education> education, ArrayList<String> volunteering) {
+    public Experience(List<Job> jobs, List<Education> education, ArrayList<Volunteer> volunteering) {
         this.jobs = jobs;
         this.education = education;
+        this.volunteering = volunteering;
+    }
+
+    public ArrayList<Volunteer> getVolunteering() {
+        return volunteering;
+    }
+
+    public void setVolunteering(ArrayList<Volunteer> volunteering) {
         this.volunteering = volunteering;
     }
 
@@ -34,11 +42,5 @@ public class Experience {
         this.education = education;
     }
 
-    public ArrayList<String> getVolunteering() {
-        return volunteering;
-    }
 
-    public void setVolunteering(ArrayList<String> volunteering) {
-        this.volunteering = volunteering;
-    }
 }
