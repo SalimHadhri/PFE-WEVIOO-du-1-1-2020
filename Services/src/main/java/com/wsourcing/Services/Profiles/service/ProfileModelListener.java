@@ -18,6 +18,7 @@ public class ProfileModelListener extends AbstractMongoEventListener<Profile> {
         this.sequenceGeneratorServiceProfile = sequenceGeneratorServiceProfile;
     }
 
+
     @Override
     public void onBeforeConvert(BeforeConvertEvent<Profile> event) {
         if (event.getSource().getId() < 1) {

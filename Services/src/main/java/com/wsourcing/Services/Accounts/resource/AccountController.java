@@ -5,6 +5,8 @@ import com.wsourcing.Services.Accounts.model.Account;
 import com.wsourcing.Services.Accounts.repository.AccountRepository;
 import com.wsourcing.Services.Accounts.repository.DatabaseSequenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -28,9 +30,20 @@ public class AccountController {
     @Autowired
     private DatabaseSequenceRepository databaseSequenceRepository;
 
+
+
+
+
+    public AccountController() {
+    }
+
     public AccountController(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
+
+
+
+
 
     @CrossOrigin()
     @PostMapping(value = "/addAccount")

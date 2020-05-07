@@ -28,7 +28,7 @@ public class Profile {
     private List<Skill2> skills ;
 
     private String url;
-    private String name;
+private String name;
     private String headline;
     private String company;
     private String school;

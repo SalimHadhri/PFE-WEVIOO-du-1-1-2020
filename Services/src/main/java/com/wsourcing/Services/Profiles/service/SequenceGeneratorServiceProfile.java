@@ -18,6 +18,8 @@ public class SequenceGeneratorServiceProfile {
 
 
     private MongoOperations mongoOperations;
+    private SequenceGeneratorServiceProfile sequenceGeneratorServiceProfile;
+
 
     @Autowired
     public SequenceGeneratorServiceProfile(MongoOperations mongoOperations) {
@@ -34,5 +36,14 @@ public class SequenceGeneratorServiceProfile {
 
     }
 
+    public MongoOperations getMongoOperations() {
+        return mongoOperations;
+    }
 
+    public void setMongoOperations(MongoOperations mongoOperations) {
+        this.mongoOperations = mongoOperations;
+    }
+
+    public SequenceGeneratorServiceProfile() {
+    }
 }

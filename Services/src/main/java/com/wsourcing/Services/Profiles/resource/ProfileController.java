@@ -3,19 +3,24 @@ package com.wsourcing.Services.Profiles.resource;
 
 
 import ch.qos.logback.core.spi.AbstractComponentTracker;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.wsourcing.Services.Accounts.model.Account;
 import com.wsourcing.Services.Profiles.exception.ProfileNotFoundException;
 import com.wsourcing.Services.Profiles.model.Profile;
 import com.wsourcing.Services.Profiles.model.Skill2;
 import com.wsourcing.Services.Profiles.repository.ProfileRepository;
-import io.micrometer.core.instrument.Tags;
+import com.wsourcing.Services.Profiles.service.SequenceGeneratorServiceProfile;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +32,27 @@ public class ProfileController {
     @Autowired
     private ProfileRepository profileRepository;
 
-    public ProfileController(ProfileRepository profileRepository) {
+    @Autowired
+    private SequenceGeneratorServiceProfile sequenceGeneratorServiceProfile;
+
+    public ProfileController(ProfileRepository profileRepository, SequenceGeneratorServiceProfile sequenceGeneratorServiceProfile) {
         this.profileRepository = profileRepository;
+        this.sequenceGeneratorServiceProfile = sequenceGeneratorServiceProfile;
+    }
+
+    //private MongoOperations mongoOperations;
+
+    // @Autowired
+    // public ProfileController(MongoOperations mongoOperations) {
+    //   this.mongoOperations = mongoOperations;
+    //
+    // @Autowired
+    // private MongoTemplate mongoTemplate;
+
+    //private MongoOperations mongoOperations;
+
+
+    public ProfileController() {
     }
 
     @CrossOrigin()
@@ -94,11 +118,18 @@ public class ProfileController {
     }
 
 
-    @GetMapping(value = "/SearchAll/{min}/{max}/{tunisia}/{categorie}/{profile}")
+    // private static final Log log = LogFactory.getLog(ProfileController.class);
+
+
+//@Autowired
+//MongoOperations mongoOperations ;
+
+
+    @GetMapping(value = "/SearchAll/{min}/{max}/{tunisia}/{categorie}/{profile}/{skill1}/{skill2}/{skill3}")
     public List<Profile> SearchAll(@PathVariable int min, @PathVariable int max, @PathVariable int tunisia, @PathVariable int categorie
-            , @PathVariable String profile) {
+            , @PathVariable String profile, @PathVariable String skill1, @PathVariable String skill2, @PathVariable String skill3) throws UnknownHostException {
 
-
+        //mongoOperations=new MongoTemplate(MongoClients.create(), "wsourcingServices");
         List<Profile> profilesRange = experienceRange(min, max);
         List<Profile> profilesRTunisia = new ArrayList<>();
         for (int i = 0; i < profilesRange.size(); i++) {
@@ -134,7 +165,7 @@ public class ProfileController {
             if (profilesRTNCategorie.get(i).getNew_features().getFinal_best_profile().contains("Technical Lead/ Architecte JEE")
                     /*|| profilesRTNCategorie.get(i).getHeadline().contains("ingénieur")
                     || profilesRTNCategorie.get(i).getHeadline().contains("engineer")
-                    || profilesRTNCategorie.get(i).getHeadline().contains("Engineer")  */)  {
+                    || profilesRTNCategorie.get(i).getHeadline().contains("Engineer")  */) {
 
                 profilesRTNCProTechnicalLead.add(profilesRTNCategorie.get(i));
             }
@@ -212,11 +243,11 @@ public class ProfileController {
 
         List<Profile> profilesRTNCProfile = new ArrayList<>();
 
-      //  String profile1 =profile;
+        //  String profile1 =profile;
 
         //if (profile.contains("/")){
-           // String profile1=profile.replace(" ","/") ;
-       // }
+        // String profile1=profile.replace(" ","/") ;
+        // }
 
         if (profile.equals("Technical Lead  Architecte JEE")) {
             profilesRTNCProfile = profilesRTNCProTechnicalLead;
@@ -242,53 +273,138 @@ public class ProfileController {
         if (profile.equals("PHP Symfony")) {
             profilesRTNCProfile = profilesRTNCProPhpSymphony;
         }
-/*
-        for(int i=0;i<profilesRTNCProfile.size();i++){
+///////////////////////////////////////////////////regex////////////////////////////////////////////////////
+        List<Profile> profilesRTNCProfileSkill = new ArrayList<>();
 
-            List<Skill2> skill2s = profilesRTNCProfile.get(i).getSkills() ;
-                for(int j=0;j<skill2s.size();j++){
-                    Query query = new Query();
-                    query.addCriteria(Criteria.where(skill2s.get(j).getName()).regex(skill1));
-                    profilesRTNCProfileSkill1.add(profilesRTNCProfile.get(i)) ;
+        if (!skill1.equals("Indefinie") && !skill2.equals("Indefinie") && !skill3.equals("Indefinie")) {
+
+            for (int q = 0; q < profilesRTNCProfile.size(); q++) {
+
+                //MongoTemplate mongoTemplate = null;
+
+                //List<Criteria> criteriaListProfiles = new ArrayList<Criteria>();
+                Criteria criteria1 = new Criteria();
+                Criteria criteria2 = new Criteria();
+                Criteria criteria3 = new Criteria();
+
+                String pattern = "iso.*";
+
+///////////////////////////////////////////////////////////////////////////////
+                criteria1 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+                        .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill1)));
+
+                criteria2 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+                        .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill2)));
+
+                criteria3 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+                        .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill3)));
+
+                //////////////////////////////////////////////////////////////////////
+                Query query1 = new Query();
+                query1.addCriteria(criteria1);
+
+                List<Profile> profiles1 = sequenceGeneratorServiceProfile.getMongoOperations().find(query1, Profile.class);
+////////////////////////////////////////////////////////////////////
+                Query query2 = new Query();
+                query2.addCriteria(criteria2);
+
+                List<Profile> profiles2 = sequenceGeneratorServiceProfile.getMongoOperations().find(query2, Profile.class);
+                ////////////////////////////////////////////////////////////////////////
+                Query query3 = new Query();
+                query3.addCriteria(criteria3);
+
+                List<Profile> profiles3 = sequenceGeneratorServiceProfile.getMongoOperations().find(query3, Profile.class);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (profiles1.size() != 0 && profiles2.size() != 0 && profiles3.size() != 0) {
+                    profilesRTNCProfileSkill.add(profilesRTNCProfile.get(q));
                 }
-            String X = profilesRTNCProfile.get(i).getSkills().
-            Query query = new Query();
-            query.addCriteria(Criteria.where(X).regex(skill1));
 
-        }*/
 
-      /*  List<Profile> profilesRTNCProfileSkill1 = new ArrayList<>();
-        for (int i = 0; i < profilesRTNCProfile.size(); i++) {
-            List<Skill2> skill2s = profilesRTNCProfile.get(i).getSkills();
-           // boolean exist = false;
+            }
+        }
+            else if (!skill1.equals("Indefinie") && !skill2.equals("Indefinie") && skill3.equals("Indefinie")) {
 
-            for (int j = 0; j < skill2s.size(); j++) {
-                Query query = new Query();
-                query.addCriteria(Criteria.where(skill2s.get(j).getName()).regex(skill1));
-                
-            }*/
-            // Query profile1 = query.addCriteria(Criteria.where(skill2s.get(j).getName()).regex(skill1));
-            //.getClass().cast(profilesRTNCProfile.get(i)) ;
+                for (int q = 0; q < profilesRTNCProfile.size(); q++) {
 
-            //  Skill2 skill2 = new Skill2() ;
-            //   skill2.setName(skill1);
-            //  query.addCriteria(Criteria.where(profilesRTNCProfile.get(i).getSkills()).regex(skill2) ) ;
-            // if(query.addCriteria(Criteria.where(profilesRTNCProfile.get(i).getSkills().get(0).getName()).regex(skill1)){
-            //   exist=true ;
-            // }
-            //  }
-            // if (exist==true){
-            //    profilesRTNCProfileSkill1.add(profilesRTNCProfile.get(i)) ;
-            // }
-            // }
-            //  Query query = new Query();
-            //  query.addCriteria(Criteria.where("a").regex(skill1));
+                    //MongoTemplate mongoTemplate = null;
 
-        //}
+                    //List<Criteria> criteriaListProfiles = new ArrayList<Criteria>();
+                    Criteria criteria1 = new Criteria();
+                    Criteria criteria2 = new Criteria();
 
-        return profilesRTNCProfile ;
+                    String pattern = "iso.*";
+
+///////////////////////////////////////////////////////////////////////////////
+                    criteria1 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+                            .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill1)));
+
+                    criteria2 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+                            .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill2)));
+
+
+
+                    //////////////////////////////////////////////////////////////////////
+                    Query query1 = new Query();
+                    query1.addCriteria(criteria1);
+
+                    List<Profile> profiles1 = sequenceGeneratorServiceProfile.getMongoOperations().find(query1, Profile.class);
+////////////////////////////////////////////////////////////////////
+                    Query query2 = new Query();
+                    query2.addCriteria(criteria2);
+
+                    List<Profile> profiles2 = sequenceGeneratorServiceProfile.getMongoOperations().find(query2, Profile.class);
+                    ////////////////////////////////////////////////////////////////////////
+
+
+                    if (profiles1.size() != 0 && profiles2.size() != 0 ) {
+                        profilesRTNCProfileSkill.add(profilesRTNCProfile.get(q));
+                    }
+
+                }
+            }
+        else if (!skill1.equals("Indefinie") && skill2.equals("Indefinie") && skill3.equals("Indefinie")) {
+
+            for (int q = 0; q < profilesRTNCProfile.size(); q++) {
+
+                //MongoTemplate mongoTemplate = null;
+
+                //List<Criteria> criteriaListProfiles = new ArrayList<Criteria>();
+                Criteria criteria1 = new Criteria();
+
+                String pattern = "iso.*";
+
+///////////////////////////////////////////////////////////////////////////////
+                criteria1 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+                        .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill1)));
+
+
+
+
+
+                //////////////////////////////////////////////////////////////////////
+                Query query1 = new Query();
+                query1.addCriteria(criteria1);
+
+                List<Profile> profiles1 = sequenceGeneratorServiceProfile.getMongoOperations().find(query1, Profile.class);
+////////////////////////////////////////////////////////////////////
+
+
+
+                if (profiles1.size() != 0 ) {
+                    profilesRTNCProfileSkill.add(profilesRTNCProfile.get(q));
+                }
+
+            }
+        }
+        else if (skill1.equals("Indefinie") && skill2.equals("Indefinie") && skill3.equals("Indefinie")) {
+
+
+            profilesRTNCProfileSkill = profilesRTNCProfile;
+        }
+
+        return profilesRTNCProfileSkill;
 
     }
-
 }
 
