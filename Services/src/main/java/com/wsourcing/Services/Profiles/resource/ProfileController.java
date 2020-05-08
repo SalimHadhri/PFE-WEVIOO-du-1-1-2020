@@ -13,6 +13,7 @@ import com.wsourcing.Services.Profiles.model.Skill2;
 import com.wsourcing.Services.Profiles.repository.ProfileRepository;
 import com.wsourcing.Services.Profiles.service.SequenceGeneratorServiceProfile;
 
+import org.apache.catalina.Manager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -23,6 +24,7 @@ import javax.validation.Valid;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @CrossOrigin()
 @RestController
@@ -125,9 +127,9 @@ public class ProfileController {
 //MongoOperations mongoOperations ;
 
 
-    @GetMapping(value = "/SearchAll/{min}/{max}/{tunisia}/{categorie}/{profile}/{skill1}/{skill2}/{skill3}")
+    @GetMapping(value = "/SearchAll/{min}/{max}/{tunisia}/{categorie}/{profile}/{termes}")
     public List<Profile> SearchAll(@PathVariable int min, @PathVariable int max, @PathVariable int tunisia, @PathVariable int categorie
-            , @PathVariable String profile, @PathVariable String skill1, @PathVariable String skill2, @PathVariable String skill3) throws UnknownHostException {
+            , @PathVariable String profile, @PathVariable String termes) throws UnknownHostException {
 
         //mongoOperations=new MongoTemplate(MongoClients.create(), "wsourcingServices");
         List<Profile> profilesRange = experienceRange(min, max);
@@ -273,137 +275,87 @@ public class ProfileController {
         if (profile.equals("PHP Symfony")) {
             profilesRTNCProfile = profilesRTNCProPhpSymphony;
         }
+        if(profile.equals("Indefinie")){
+            profilesRTNCProfile = profilesRTNCategorie ;
+        }
 ///////////////////////////////////////////////////regex////////////////////////////////////////////////////
-        List<Profile> profilesRTNCProfileSkill = new ArrayList<>();
 
-        if (!skill1.equals("Indefinie") && !skill2.equals("Indefinie") && !skill3.equals("Indefinie")) {
+        Criteria criteria = new Criteria();
 
-            for (int q = 0; q < profilesRTNCProfile.size(); q++) {
+        List<String> words   = new ArrayList<>();
 
-                //MongoTemplate mongoTemplate = null;
-
-                //List<Criteria> criteriaListProfiles = new ArrayList<Criteria>();
-                Criteria criteria1 = new Criteria();
-                Criteria criteria2 = new Criteria();
-                Criteria criteria3 = new Criteria();
-
-                String pattern = "iso.*";
-
-///////////////////////////////////////////////////////////////////////////////
-                criteria1 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
-                        .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill1)));
-
-                criteria2 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
-                        .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill2)));
-
-                criteria3 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
-                        .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill3)));
-
-                //////////////////////////////////////////////////////////////////////
-                Query query1 = new Query();
-                query1.addCriteria(criteria1);
-
-                List<Profile> profiles1 = sequenceGeneratorServiceProfile.getMongoOperations().find(query1, Profile.class);
-////////////////////////////////////////////////////////////////////
-                Query query2 = new Query();
-                query2.addCriteria(criteria2);
-
-                List<Profile> profiles2 = sequenceGeneratorServiceProfile.getMongoOperations().find(query2, Profile.class);
-                ////////////////////////////////////////////////////////////////////////
-                Query query3 = new Query();
-                query3.addCriteria(criteria3);
-
-                List<Profile> profiles3 = sequenceGeneratorServiceProfile.getMongoOperations().find(query3, Profile.class);
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                if (profiles1.size() != 0 && profiles2.size() != 0 && profiles3.size() != 0) {
-                    profilesRTNCProfileSkill.add(profilesRTNCProfile.get(q));
-                }
+        words.add("IOS") ;
+        words.add("Full") ;
+        words.add("Stack") ;
+        words.add("DBA") ;
+        words.add("Data") ;
+        words.add("scientist") ;
+        words.add("developer") ;
+        words.add("engineer") ;
+        words.add("Manager") ;
+        words.add("CSM") ;
+        words.add("java") ;
+        words.add("j2EE") ;
+        words.add("J2EE") ;
+        words.add("Java") ;
+        words.add("JEE") ;
+        words.add("jee") ;
+        words.add("OCAJP8") ;
+        words.add("Angular") ;
+        words.add("Spring") ;
+        words.add("chef") ;
+        words.add("Chef") ;
+        words.add("AngularJs") ;
+        words.add("technique") ;
+        words.add("DBA") ;
+        words.add("Analyste") ;
+        words.add("spring") ;
 
 
+
+        List<Profile> profilesRTNCProfileTermes = new ArrayList<>();
+
+
+      //  boolean existInProfile = false ;
+
+        for (int q = 0; q < profilesRTNCProfile.size(); q++) {
+
+            boolean existWord=false;
+
+            for(int v =0;v<words.size();v++){
+
+//String query1 = "$regex:(?=*." +words.get(v)+")" ;
+          //  String query1 = "$regex:{ $in: [" +words.get(v) ;
+
+
+//Pattern pattern = Pattern.compile(query1) ;
+if(termes.equals(words.get(v))) {
+
+   // { name: { $regex: /acme.*corp/i, $nin: [ 'acmeblahcorp' ] } }
+
+//String pattern= "$regex: '"+termes+"', $nin: ['"+profilesRTNCProfile.get(q).getHeadline()+"']" ;
+
+    criteria = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+            .andOperator(Criteria.where("headline").is(profilesRTNCProfile.get(q).getHeadline()).regex(".*"+termes));
+
+    Query query = new Query();
+    query.addCriteria(criteria);
+
+    List<Profile> profiles = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
+
+    if (profiles.size() != 0) {
+        existWord = true;
+    }
+}
             }
-        }
-            else if (!skill1.equals("Indefinie") && !skill2.equals("Indefinie") && skill3.equals("Indefinie")) {
-
-                for (int q = 0; q < profilesRTNCProfile.size(); q++) {
-
-                    //MongoTemplate mongoTemplate = null;
-
-                    //List<Criteria> criteriaListProfiles = new ArrayList<Criteria>();
-                    Criteria criteria1 = new Criteria();
-                    Criteria criteria2 = new Criteria();
-
-                    String pattern = "iso.*";
-
-///////////////////////////////////////////////////////////////////////////////
-                    criteria1 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
-                            .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill1)));
-
-                    criteria2 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
-                            .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill2)));
-
-
-
-                    //////////////////////////////////////////////////////////////////////
-                    Query query1 = new Query();
-                    query1.addCriteria(criteria1);
-
-                    List<Profile> profiles1 = sequenceGeneratorServiceProfile.getMongoOperations().find(query1, Profile.class);
-////////////////////////////////////////////////////////////////////
-                    Query query2 = new Query();
-                    query2.addCriteria(criteria2);
-
-                    List<Profile> profiles2 = sequenceGeneratorServiceProfile.getMongoOperations().find(query2, Profile.class);
-                    ////////////////////////////////////////////////////////////////////////
-
-
-                    if (profiles1.size() != 0 && profiles2.size() != 0 ) {
-                        profilesRTNCProfileSkill.add(profilesRTNCProfile.get(q));
-                    }
-
-                }
+            if(existWord){
+                profilesRTNCProfileTermes.add(profilesRTNCProfile.get(q)) ;
             }
-        else if (!skill1.equals("Indefinie") && skill2.equals("Indefinie") && skill3.equals("Indefinie")) {
-
-            for (int q = 0; q < profilesRTNCProfile.size(); q++) {
-
-                //MongoTemplate mongoTemplate = null;
-
-                //List<Criteria> criteriaListProfiles = new ArrayList<Criteria>();
-                Criteria criteria1 = new Criteria();
-
-                String pattern = "iso.*";
-
-///////////////////////////////////////////////////////////////////////////////
-                criteria1 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
-                        .andOperator(Criteria.where("skills").elemMatch(Criteria.where("name").is(skill1)));
-
-
-
-
-
-                //////////////////////////////////////////////////////////////////////
-                Query query1 = new Query();
-                query1.addCriteria(criteria1);
-
-                List<Profile> profiles1 = sequenceGeneratorServiceProfile.getMongoOperations().find(query1, Profile.class);
-////////////////////////////////////////////////////////////////////
-
-
-
-                if (profiles1.size() != 0 ) {
-                    profilesRTNCProfileSkill.add(profilesRTNCProfile.get(q));
-                }
-
             }
-        }
-        else if (skill1.equals("Indefinie") && skill2.equals("Indefinie") && skill3.equals("Indefinie")) {
 
 
-            profilesRTNCProfileSkill = profilesRTNCProfile;
-        }
 
-        return profilesRTNCProfileSkill;
+        return profilesRTNCProfileTermes;
 
     }
 }
