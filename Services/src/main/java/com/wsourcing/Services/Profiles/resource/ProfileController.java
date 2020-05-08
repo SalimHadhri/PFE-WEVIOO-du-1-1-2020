@@ -5,7 +5,6 @@ package com.wsourcing.Services.Profiles.resource;
 import ch.qos.logback.core.spi.AbstractComponentTracker;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.wsourcing.Services.Accounts.model.Account;
 import com.wsourcing.Services.Profiles.exception.ProfileNotFoundException;
 import com.wsourcing.Services.Profiles.model.Profile;

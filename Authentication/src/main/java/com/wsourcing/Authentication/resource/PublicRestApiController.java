@@ -66,9 +66,13 @@ public class PublicRestApiController {
 
                 HashMap<String, String> map = new HashMap<>();
 
+                long id = l.get(i).getId();
+                String idString = Long.toString(id);
+
                 map.put("username", principal.getUsername());
                 map.put("role", "ROLE_" + l.get(i).getRoles());
                 map.put("token", token);
+                map.put("id", idString);
                 return map;
 
             }
