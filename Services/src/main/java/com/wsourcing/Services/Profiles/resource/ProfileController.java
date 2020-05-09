@@ -101,20 +101,27 @@ public class ProfileController {
     }
 
     public List<Profile> experienceRange(int min, int max) throws ProfileNotFoundException {
+        List<Profile> orderedProfiles = new ArrayList<>();
+        List<Profile> profiles = profileRepository.findAll();
+
+        if(min==0 && max==0){
+            orderedProfiles=profiles ;
+        }else{
+
+
         if (min == 0) {
             min = min + 1;
         }
         if (min > max) {
             throw new ProfileNotFoundException(" the range of experiences does not match");
         }
-        List<Profile> profiles = profileRepository.findAll();
-        List<Profile> orderedProfiles = new ArrayList<>();
+
 
         for (int i = 0; i < profiles.size(); i++) {
             if (nbrJob(profiles.get(i)) >= min && nbrJob(profiles.get(i)) <= max) {
                 orderedProfiles.add(profiles.get(i));
             }
-        }
+        }}
         return orderedProfiles;
     }
 
@@ -131,6 +138,7 @@ public class ProfileController {
             , @PathVariable String profile, @PathVariable String termes) throws UnknownHostException {
 
         //mongoOperations=new MongoTemplate(MongoClients.create(), "wsourcingServices");
+
         List<Profile> profilesRange = experienceRange(min, max);
         List<Profile> profilesRTunisia = new ArrayList<>();
         for (int i = 0; i < profilesRange.size(); i++) {
@@ -281,6 +289,128 @@ public class ProfileController {
 
         Criteria criteria = new Criteria();
 
+        List<Profile> profilesRTNCProfileTermes = new ArrayList<>();
+
+if (termes.equals("Indefinie")){
+    profilesRTNCProfileTermes = profilesRTNCProfile ;
+
+}
+else {
+
+
+    //  boolean existInProfile = false ;
+
+    for (int q = 0; q < profilesRTNCProfile.size(); q++) {
+
+        boolean existWord = false;
+
+
+        criteria = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+                .andOperator(Criteria.where("headline").is(profilesRTNCProfile.get(q).getHeadline()).regex(".*" + termes));
+
+        Query query = new Query();
+        query.addCriteria(criteria);
+
+        List<Profile> profileQuery = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
+
+        if (profileQuery.size() != 0) {
+            existWord = true;
+        }
+
+
+        if (existWord) {
+            profilesRTNCProfileTermes.add(profilesRTNCProfile.get(q));
+        }
+
+
+    }
+    }
+        return profilesRTNCProfileTermes;
+
+}
+
+
+/*
+    public  String charTo(int i, String name){
+        String nameReturn ;
+        if(i<=name.length()){
+
+
+        }
+
+    }*/
+
+    @GetMapping(value = "/SearchName/{name}")
+    public List<Profile> SearchName(@PathVariable String name) {
+        List<Profile> profilesNames = new ArrayList<>();
+
+        List<Profile> profiles = profileRepository.findAll();
+        Criteria criteria = new Criteria();
+
+
+        if (name.equals("Indefinie")) {
+            profilesNames = profiles;
+
+        } else {
+
+            for (int q = 0; q < profiles.size(); q++) {
+
+                boolean existWord = false;
+
+
+                criteria = (Criteria.where("_id").is(profiles.get(q).getId()))
+                                .andOperator(Criteria.where("name").is(profiles.get(q).getName()).regex(".*" + name));
+
+                        Query query = new Query();
+                        query.addCriteria(criteria);
+
+                        List<Profile> profileQuery = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
+
+                        if (profileQuery.size() != 0) {
+                            existWord = true;
+                        }
+
+
+                if (existWord) {
+                    profilesNames.add(profiles.get(q));
+                }
+        }
+        }
+        return profilesNames ;
+    }
+}
+
+/*
+boolean existWord = false;
+
+        for (int v = 0; v < words.size(); v++) {
+
+//String query1 = "$regex:(?=*." +words.get(v)+")" ;
+        //  String query1 = "$regex:{ $in: [" +words.get(v) ;
+
+
+//Pattern pattern = Pattern.compile(query1) ;
+        if (termes.equals(words.get(v))) {
+
+        // { name: { $regex: /acme.*corp/i, $ncriteriain: [ 'acmeblahcorp' ] } }
+
+//String pattern= "$regex: '"+termes+"', $nin: ['"+profilesRTNCProfile.get(q).getHeadline()+"']" ;
+
+        criteria = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+        .andOperator(Criteria.where("headline").is(profilesRTNCProfile.get(q).getHeadline()).regex(".*" + termes));
+
+        Query query = new Query();
+        query.addCriteria(criteria);
+
+        List<Profile> profiles = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
+
+        if (profiles.size() != 0) {
+        existWord = true;
+        }
+        }
+
+
+
         List<String> words   = new ArrayList<>();
 
         words.add("IOS") ;
@@ -311,51 +441,4 @@ public class ProfileController {
         words.add("spring") ;
 
 
-
-        List<Profile> profilesRTNCProfileTermes = new ArrayList<>();
-
-
-      //  boolean existInProfile = false ;
-
-        for (int q = 0; q < profilesRTNCProfile.size(); q++) {
-
-            boolean existWord=false;
-
-            for(int v =0;v<words.size();v++){
-
-//String query1 = "$regex:(?=*." +words.get(v)+")" ;
-          //  String query1 = "$regex:{ $in: [" +words.get(v) ;
-
-
-//Pattern pattern = Pattern.compile(query1) ;
-if(termes.equals(words.get(v))) {
-
-   // { name: { $regex: /acme.*corp/i, $nin: [ 'acmeblahcorp' ] } }
-
-//String pattern= "$regex: '"+termes+"', $nin: ['"+profilesRTNCProfile.get(q).getHeadline()+"']" ;
-
-    criteria = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
-            .andOperator(Criteria.where("headline").is(profilesRTNCProfile.get(q).getHeadline()).regex(".*"+termes));
-
-    Query query = new Query();
-    query.addCriteria(criteria);
-
-    List<Profile> profiles = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
-
-    if (profiles.size() != 0) {
-        existWord = true;
-    }
-}
-            }
-            if(existWord){
-                profilesRTNCProfileTermes.add(profilesRTNCProfile.get(q)) ;
-            }
-            }
-
-
-
-        return profilesRTNCProfileTermes;
-
-    }
-}
-
+*/
