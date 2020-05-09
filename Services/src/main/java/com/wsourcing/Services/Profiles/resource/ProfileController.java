@@ -288,6 +288,8 @@ public class ProfileController {
 ///////////////////////////////////////////////////regex////////////////////////////////////////////////////
 
         Criteria criteria = new Criteria();
+        Criteria criteria1 = new Criteria();
+
 
         List<Profile> profilesRTNCProfileTermes = new ArrayList<>();
 
@@ -308,12 +310,19 @@ else {
         criteria = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
                 .andOperator(Criteria.where("headline").is(profilesRTNCProfile.get(q).getHeadline()).regex(".*" + termes));
 
+        criteria1 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+                .andOperator(Criteria.where("summary").is(profilesRTNCProfile.get(q).getSummary()).regex(".*" + termes));
+
         Query query = new Query();
         query.addCriteria(criteria);
 
-        List<Profile> profileQuery = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
+        Query query1 = new Query();
+        query1.addCriteria(criteria1);
 
-        if (profileQuery.size() != 0) {
+        List<Profile> profileQuery = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
+        List<Profile> profileQuery1 = sequenceGeneratorServiceProfile.getMongoOperations().find(query1, Profile.class);
+
+        if (profileQuery.size() != 0 || profileQuery1.size() != 0) {
             existWord = true;
         }
 
