@@ -154,6 +154,19 @@ public class AccountController {
     return nbrDayScraping - nbrActualScraping ;
     }
 
+    @GetMapping(value = "/nbrScrapingToDo")
+    public int nbrScrapingToDo () {
+
+        List<Account> accounts = accountRepository.findAll();
+        int nbrActualScraping = 0;
+
+        for(int i=0 ; i<accounts.size();i++){
+
+            nbrActualScraping = nbrActualScraping + accounts.get(i).getNb_scraping_actuel();
+        }
+        return nbrActualScraping ;
+    }
+
     @GetMapping(value = "/nbrAccountsInWork")
     public int nbrAccountsInWork () {
 

@@ -115,7 +115,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/service/profiles/deleteProfile/{id}").hasRole("ADMIN")
                 //searches
                 .antMatchers("/service/profiles/SearchAll/{min}/{max}/{tunisia}/{categorie}/{profile}/{termes}").permitAll()
-                .antMatchers("/service/profiles/SearchName/{name}").hasRole("USER")
+                .antMatchers("/service/profiles/SearchName/{name}").permitAll()
 
 
 
