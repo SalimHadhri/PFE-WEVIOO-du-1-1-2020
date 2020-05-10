@@ -104,24 +104,25 @@ public class ProfileController {
         List<Profile> orderedProfiles = new ArrayList<>();
         List<Profile> profiles = profileRepository.findAll();
 
-        if(min==0 && max==0){
-            orderedProfiles=profiles ;
-        }else{
+        if (min == 0 && max == 0) {
+            orderedProfiles = profiles;
+        } else {
 
 
-        if (min == 0) {
-            min = min + 1;
-        }
-        if (min > max) {
-            throw new ProfileNotFoundException(" the range of experiences does not match");
-        }
-
-
-        for (int i = 0; i < profiles.size(); i++) {
-            if (nbrJob(profiles.get(i)) >= min && nbrJob(profiles.get(i)) <= max) {
-                orderedProfiles.add(profiles.get(i));
+            if (min == 0) {
+                min = min + 1;
             }
-        }}
+            if (min > max) {
+                throw new ProfileNotFoundException(" the range of experiences does not match");
+            }
+
+
+            for (int i = 0; i < profiles.size(); i++) {
+                if (nbrJob(profiles.get(i)) >= min && nbrJob(profiles.get(i)) <= max) {
+                    orderedProfiles.add(profiles.get(i));
+                }
+            }
+        }
         return orderedProfiles;
     }
 
@@ -172,9 +173,7 @@ public class ProfileController {
 
         for (int i = 0; i < profilesRTNCategorie.size(); i++) {
             if (profilesRTNCategorie.get(i).getNew_features().getFinal_best_profile().contains("Technical Lead/ Architecte JEE")
-                    /*|| profilesRTNCategorie.get(i).getHeadline().contains("ingénieur")
-                    || profilesRTNCategorie.get(i).getHeadline().contains("engineer")
-                    || profilesRTNCategorie.get(i).getHeadline().contains("Engineer")  */) {
+) {
 
                 profilesRTNCProTechnicalLead.add(profilesRTNCategorie.get(i));
             }
@@ -182,69 +181,49 @@ public class ProfileController {
 
         for (int j = 0; j < profilesRTNCategorie.size(); j++) {
             if (profilesRTNCategorie.get(j).getNew_features().getFinal_best_profile().contains("JAVA/JEE")
-                   /* || profilesRTNCategorie.get(j).getHeadline().contains("développeur")
-                    || profilesRTNCategorie.get(j).getHeadline().contains("developer") ||
-                    profilesRTNCategorie.get(j).getHeadline().contains("Developer")*/) {
+) {
 
                 profilesRTNCProJavaJee.add(profilesRTNCategorie.get(j));
             }
         }
         for (int e = 0; e < profilesRTNCategorie.size(); e++) {
             if (profilesRTNCategorie.get(e).getNew_features().getFinal_best_profile().contains("DRUPAL")
-                    /*|| profilesRTNCategorie.get(e).getHeadline().contains("technical manager")
-                    || profilesRTNCategorie.get(e).getHeadline().contains("Technical Manager")
-                    || profilesRTNCategorie.get(e).getHeadline().contains("Manageur technique") || profilesRTNCategorie.get(e).getHeadline().contains("manageur technique")
-                    || profilesRTNCategorie.get(e).getHeadline().contains("Manageur Technique")*/) {
+) {
 
                 profilesRTNCProDupral.add(profilesRTNCategorie.get(e));
             }
         }
         for (int f = 0; f < profilesRTNCategorie.size(); f++) {
             if (profilesRTNCategorie.get(f).getNew_features().getFinal_best_profile().contains("Product Owner")
-                    /*|| profilesRTNCategorie.get(f).getHeadline().contains("chef de projet")
-                    || profilesRTNCategorie.get(f).getHeadline().contains("Chef de Projet")
-                    || profilesRTNCategorie.get(f).getHeadline().contains("Project manager") || profilesRTNCategorie.get(f).getHeadline().contains("project manager")
-                    || profilesRTNCategorie.get(f).getHeadline().contains("Project Manager")*/) {
+) {
 
                 profilesRTNCProProductOwner.add(profilesRTNCategorie.get(f));
             }
         }
         for (int g = 0; g < profilesRTNCategorie.size(); g++) {
             if (profilesRTNCategorie.get(g).getNew_features().getFinal_best_profile().contains("Web Back-End")
-                    /*|| profilesRTNCategorie.get(g).getHeadline().contains("référent technique")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Référent Technique")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Technical referent") || profilesRTNCategorie.get(g).getHeadline().contains("technical referent")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Technical Referent")*/) {
+) {
 
                 profilesRTNCProWebBackEnd.add(profilesRTNCategorie.get(g));
             }
         }
         for (int x = 0; x < profilesRTNCategorie.size(); x++) {
             if (profilesRTNCategorie.get(x).getNew_features().getFinal_best_profile().contains("FullStack JS")
-                    /*|| profilesRTNCategorie.get(g).getHeadline().contains("référent technique")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Référent Technique")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Technical referent") || profilesRTNCategorie.get(g).getHeadline().contains("technical referent")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Technical Referent")*/) {
+                    ) {
 
                 profilesRTNCProFullStackJs.add(profilesRTNCategorie.get(x));
             }
         }
         for (int y = 0; y < profilesRTNCategorie.size(); y++) {
             if (profilesRTNCategorie.get(y).getNew_features().getFinal_best_profile().contains("Embarqué Middleware")
-                    /*|| profilesRTNCategorie.get(g).getHeadline().contains("référent technique")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Référent Technique")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Technical referent") || profilesRTNCategorie.get(g).getHeadline().contains("technical referent")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Technical Referent")*/) {
+                    ) {
 
                 profilesRTNCProEmbarqueMiddleWare.add(profilesRTNCategorie.get(y));
             }
         }
         for (int z = 0; z < profilesRTNCategorie.size(); z++) {
             if (profilesRTNCategorie.get(z).getNew_features().getFinal_best_profile().contains("PHP/Symfony")
-                    /*|| profilesRTNCategorie.get(g).getHeadline().contains("référent technique")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Référent Technique")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Technical referent") || profilesRTNCategorie.get(g).getHeadline().contains("technical referent")
-                    || profilesRTNCategorie.get(g).getHeadline().contains("Technical Referent")*/) {
+                  ) {
 
                 profilesRTNCProPhpSymphony.add(profilesRTNCategorie.get(z));
             }
@@ -276,14 +255,14 @@ public class ProfileController {
         if (profile.equals("FullStack JS")) {
             profilesRTNCProfile = profilesRTNCProFullStackJs;
         }
-        if (profile.equals("Embarqué Middleware")) {
+       if (profile.equals("Embarque Middleware")) {
             profilesRTNCProfile = profilesRTNCProEmbarqueMiddleWare;
         }
         if (profile.equals("PHP Symfony")) {
             profilesRTNCProfile = profilesRTNCProPhpSymphony;
         }
-        if(profile.equals("Indefinie")){
-            profilesRTNCProfile = profilesRTNCategorie ;
+        if (profile.equals("Indefinie")) {
+            profilesRTNCProfile = profilesRTNCategorie;
         }
 ///////////////////////////////////////////////////regex////////////////////////////////////////////////////
 
@@ -293,50 +272,49 @@ public class ProfileController {
 
         List<Profile> profilesRTNCProfileTermes = new ArrayList<>();
 
-if (termes.equals("Indefinie")){
-    profilesRTNCProfileTermes = profilesRTNCProfile ;
+        if (termes.equals("Indefinie")) {
+            profilesRTNCProfileTermes = profilesRTNCProfile;
 
-}
-else {
-
-
-    //  boolean existInProfile = false ;
-
-    for (int q = 0; q < profilesRTNCProfile.size(); q++) {
-
-        boolean existWord = false;
+        } else {
 
 
-        criteria = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
-                .andOperator(Criteria.where("headline").is(profilesRTNCProfile.get(q).getHeadline()).regex(".*" + termes));
+            //  boolean existInProfile = false ;
 
-        criteria1 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
-                .andOperator(Criteria.where("summary").is(profilesRTNCProfile.get(q).getSummary()).regex(".*" + termes));
+            for (int q = 0; q < profilesRTNCProfile.size(); q++) {
 
-        Query query = new Query();
-        query.addCriteria(criteria);
+                boolean existWord = false;
 
-        Query query1 = new Query();
-        query1.addCriteria(criteria1);
 
-        List<Profile> profileQuery = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
-        List<Profile> profileQuery1 = sequenceGeneratorServiceProfile.getMongoOperations().find(query1, Profile.class);
+                criteria = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+                        .andOperator(Criteria.where("headline").is(profilesRTNCProfile.get(q).getHeadline()).regex(".*" + termes));
 
-        if (profileQuery.size() != 0 || profileQuery1.size() != 0) {
-            existWord = true;
+                criteria1 = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
+                        .andOperator(Criteria.where("summary").is(profilesRTNCProfile.get(q).getSummary()).regex(".*" + termes));
+
+                Query query = new Query();
+                query.addCriteria(criteria);
+
+                Query query1 = new Query();
+                query1.addCriteria(criteria1);
+
+                List<Profile> profileQuery = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
+                List<Profile> profileQuery1 = sequenceGeneratorServiceProfile.getMongoOperations().find(query1, Profile.class);
+
+                if (profileQuery.size() != 0 || profileQuery1.size() != 0) {
+                    existWord = true;
+                }
+
+
+                if (existWord) {
+                    profilesRTNCProfileTermes.add(profilesRTNCProfile.get(q));
+                }
+
+
+            }
         }
-
-
-        if (existWord) {
-            profilesRTNCProfileTermes.add(profilesRTNCProfile.get(q));
-        }
-
-
-    }
-    }
         return profilesRTNCProfileTermes;
 
-}
+    }
 
 
 /*
@@ -368,87 +346,183 @@ else {
 
 
                 criteria = (Criteria.where("_id").is(profiles.get(q).getId()))
-                                .andOperator(Criteria.where("name").is(profiles.get(q).getName()).regex(".*" + name));
+                        .andOperator(Criteria.where("name").is(profiles.get(q).getName()).regex(".*" + name));
 
-                        Query query = new Query();
-                        query.addCriteria(criteria);
+                Query query = new Query();
+                query.addCriteria(criteria);
 
-                        List<Profile> profileQuery = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
+                List<Profile> profileQuery = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
 
 
-                        if (profileQuery.size() != 0) {
-                            existWord = true;
-                        }
+                if (profileQuery.size() != 0) {
+                    existWord = true;
+                }
 
 
                 if (existWord) {
                     profilesNames.add(profiles.get(q));
                 }
+            }
         }
-        }
-        return profilesNames ;
+        return profilesNames;
     }
+
+
+    @GetMapping(value = "/SearchSimilarProfiles/{profile}/{termes}")
+    public List<Profile> SearchSimilarProfiles(@PathVariable String profile, @PathVariable String termes) {
+
+        List<Profile> allProfiles = profileRepository.findAll();
+
+
+        List<Profile> profilesRTNCProTechnicalLead = new ArrayList<>();
+        List<Profile> profilesRTNCProJavaJee = new ArrayList<>();
+        List<Profile> profilesRTNCProDupral = new ArrayList<>();
+        List<Profile> profilesRTNCProProductOwner = new ArrayList<>();
+        List<Profile> profilesRTNCProWebBackEnd = new ArrayList<>();
+        List<Profile> profilesRTNCProFullStackJs = new ArrayList<>();
+        List<Profile> profilesRTNCProEmbarqueMiddleWare = new ArrayList<>();
+        List<Profile> profilesRTNCProPhpSymphony = new ArrayList<>();
+
+
+        for (int i = 0; i < allProfiles.size(); i++) {
+            if (allProfiles.get(i).getNew_features().getFinal_best_profile().contains("Technical Lead/ Architecte JEE")
+) {
+
+                profilesRTNCProTechnicalLead.add(allProfiles.get(i));
+            }
+        }
+
+        for (int j = 0; j < allProfiles.size(); j++) {
+            if (allProfiles.get(j).getNew_features().getFinal_best_profile().contains("JAVA/JEE")
+) {
+
+                profilesRTNCProJavaJee.add(allProfiles.get(j));
+            }
+        }
+        for (int e = 0; e < allProfiles.size(); e++) {
+            if (allProfiles.get(e).getNew_features().getFinal_best_profile().contains("DRUPAL")
+                  ) {
+
+                profilesRTNCProDupral.add(allProfiles.get(e));
+            }
+        }
+        for (int f = 0; f < allProfiles.size(); f++) {
+            if (allProfiles.get(f).getNew_features().getFinal_best_profile().contains("Product Owner")
+) {
+
+                profilesRTNCProProductOwner.add(allProfiles.get(f));
+            }
+        }
+        for (int g = 0; g < allProfiles.size(); g++) {
+            if (allProfiles.get(g).getNew_features().getFinal_best_profile().contains("Web Back-End")
+) {
+
+                profilesRTNCProWebBackEnd.add(allProfiles.get(g));
+            }
+        }
+       for (int x = 0; x < allProfiles.size(); x++) {
+            if (allProfiles.get(x).getNew_features().getFinal_best_profile().contains("FullStack JS")
+) {
+
+                profilesRTNCProFullStackJs.add(allProfiles.get(x));
+            }
+        }
+        for (int y = 0; y < allProfiles.size(); y++) {
+            if (allProfiles.get(y).getNew_features().getFinal_best_profile().contains("Embarqué Middleware")
+) {
+
+                profilesRTNCProEmbarqueMiddleWare.add(allProfiles.get(y));
+            }
+        }
+       for (int z = 0; z < allProfiles.size(); z++) {
+            if (allProfiles.get(z).getNew_features().getFinal_best_profile().contains("PHP/Symfony")
+) {
+
+                profilesRTNCProPhpSymphony.add(allProfiles.get(z));
+            }
+        }
+
+        List<Profile> chosenPofile = new ArrayList<>();
+
+
+        if (profile.equals("Technical Lead  Architecte JEE")) {
+            chosenPofile = profilesRTNCProTechnicalLead;
+        }
+        if (profile.equals("JAVA JEE")) {
+            chosenPofile = profilesRTNCProJavaJee;
+        }
+        if (profile.equals("DRUPAL")) {
+            chosenPofile = profilesRTNCProDupral;
+        }
+        if (profile.equals("Product Owner")) {
+            chosenPofile = profilesRTNCProProductOwner;
+        }
+        if (profile.equals("Web Back-End")) {
+            chosenPofile = profilesRTNCProWebBackEnd;
+        }
+        if (profile.equals("FullStack JS")) {
+            chosenPofile = profilesRTNCProFullStackJs;
+        }
+        if (profile.equals("Embarque Middleware")) {
+            chosenPofile = profilesRTNCProEmbarqueMiddleWare;
+        }
+        if (profile.equals("PHP Symfony")) {
+            chosenPofile = profilesRTNCProPhpSymphony;
+        }
+        if (profile.equals("Indefinie")) {
+            chosenPofile = allProfiles;
+        }
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Criteria criteria = new Criteria();
+        Criteria criteria1 = new Criteria();
+
+        List<Profile> chosenProfileTermes = new ArrayList<>();
+
+        if (termes.equals("Indefinie")) {
+            chosenProfileTermes = chosenPofile;
+
+        } else {
+
+
+            //  boolean existInProfile = false ;
+
+            for (int q = 0; q < chosenPofile.size(); q++) {
+
+                boolean existWord = false;
+
+
+                criteria = (Criteria.where("_id").is(chosenPofile.get(q).getId()))
+                        .andOperator(Criteria.where("headline").is(chosenPofile.get(q).getHeadline()).regex(".*" + termes));
+
+                criteria1 = (Criteria.where("_id").is(chosenPofile.get(q).getId()))
+                        .andOperator(Criteria.where("summary").is(chosenPofile.get(q).getSummary()).regex(".*" + termes));
+
+                Query query = new Query();
+                query.addCriteria(criteria);
+
+                Query query1 = new Query();
+                query1.addCriteria(criteria1);
+
+                List<Profile> profileQuery = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
+                List<Profile> profileQuery1 = sequenceGeneratorServiceProfile.getMongoOperations().find(query1, Profile.class);
+
+                if (profileQuery.size() != 0 || profileQuery1.size() != 0) {
+                    existWord = true;
+                }
+
+
+                if (existWord) {
+                    chosenProfileTermes.add(chosenPofile.get(q));
+                }
+
+
+            }
+        }
+
+        return chosenProfileTermes ;
+    }
+
 }
 
-/*
-boolean existWord = false;
-
-        for (int v = 0; v < words.size(); v++) {
-
-//String query1 = "$regex:(?=*." +words.get(v)+")" ;
-        //  String query1 = "$regex:{ $in: [" +words.get(v) ;
-
-
-//Pattern pattern = Pattern.compile(query1) ;
-        if (termes.equals(words.get(v))) {
-
-        // { name: { $regex: /acme.*corp/i, $ncriteriain: [ 'acmeblahcorp' ] } }
-
-//String pattern= "$regex: '"+termes+"', $nin: ['"+profilesRTNCProfile.get(q).getHeadline()+"']" ;
-
-        criteria = (Criteria.where("_id").is(profilesRTNCProfile.get(q).getId()))
-        .andOperator(Criteria.where("headline").is(profilesRTNCProfile.get(q).getHeadline()).regex(".*" + termes));
-
-        Query query = new Query();
-        query.addCriteria(criteria);
-
-        List<Profile> profiles = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
-
-        if (profiles.size() != 0) {
-        existWord = true;
-        }
-        }
-
-
-
-        List<String> words   = new ArrayList<>();
-
-        words.add("IOS") ;
-        words.add("Full") ;
-        words.add("Stack") ;
-        words.add("DBA") ;
-        words.add("Data") ;
-        words.add("scientist") ;
-        words.add("developer") ;
-        words.add("engineer") ;
-        words.add("Manager") ;
-        words.add("CSM") ;
-        words.add("java") ;
-        words.add("j2EE") ;
-        words.add("J2EE") ;
-        words.add("Java") ;
-        words.add("JEE") ;
-        words.add("jee") ;
-        words.add("OCAJP8") ;
-        words.add("Angular") ;
-        words.add("Spring") ;
-        words.add("chef") ;
-        words.add("Chef") ;
-        words.add("AngularJs") ;
-        words.add("technique") ;
-        words.add("DBA") ;
-        words.add("Analyste") ;
-        words.add("spring") ;
-
-
-*/

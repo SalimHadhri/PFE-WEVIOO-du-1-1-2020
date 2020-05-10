@@ -128,6 +128,8 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profiles/SearchAll/{min}/{max}/{tunisia}/{categorie}/{profile}/{termes}").permitAll()
                 .antMatchers("/profiles/SearchName/{name}").hasRole("USER")
                 .antMatchers("/profiles/SearchName/{name}").hasRole("USER")
+                .antMatchers("/profiles/SearchSimilarProfiles/{profile}/{termes}").hasRole("USER")
+
 
 
 

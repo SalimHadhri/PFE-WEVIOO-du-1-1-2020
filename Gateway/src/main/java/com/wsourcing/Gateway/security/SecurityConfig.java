@@ -116,6 +116,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //searches
                 .antMatchers("/service/profiles/SearchAll/{min}/{max}/{tunisia}/{categorie}/{profile}/{termes}").permitAll()
                 .antMatchers("/service/profiles/SearchName/{name}").permitAll()
+                .antMatchers("/service/profiles/SearchSimilarProfiles/{profile}/{termes}").hasRole("USER")
+
 
 
 
