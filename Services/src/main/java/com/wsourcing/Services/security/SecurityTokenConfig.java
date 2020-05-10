@@ -123,6 +123,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profiles/listProfiles").permitAll()
                 .antMatchers("/profiles/updateProfile/{id}").hasRole("ADMIN")
                 .antMatchers("/profiles/deleteProfile/{id}").hasRole("ADMIN")
+                .antMatchers("/profiles/findProfile/{id}").hasRole("ADMIN")
                 ///Searches
                 .antMatchers("/profiles/SearchAll/{min}/{max}/{tunisia}/{categorie}/{profile}/{termes}").permitAll()
                 .antMatchers("/profiles/SearchName/{name}").hasRole("USER")
