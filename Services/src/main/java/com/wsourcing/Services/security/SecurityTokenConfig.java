@@ -1,10 +1,13 @@
 package com.wsourcing.Services.security;
 
 
+import com.wsourcing.Services.Accounts.resource.AccountController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,18 +15,57 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableScheduling
 public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtProperties config;
 
+
+
+   @Autowired
+    private AccountController accountController ;
+
+    //@Bean
+    //public AccountController Account() {
+    //    return new AccountController();
+   // }
+
     @Bean
     public JwtProperties jwtConfig() {
         return new JwtProperties();
     }
+
+
+    private List<Integer> ScrapingDays= new ArrayList<>() ;
+
+
+
+
+
+
+    @Scheduled(cron = "1 * * * * ?",zone="Africa/Tunis")
+    public void ScrapEveryDay() {
+       // AccountController accountController=new AccountController() ;
+        int newScrapedProfiles = accountController.nbrScrapingDone();
+
+
+        if(ScrapingDays.size()<7) {
+              ScrapingDays.add(newScrapedProfiles);
+          }
+          else{
+              ScrapingDays= new ArrayList<>();
+            ScrapingDays.add(newScrapedProfiles);
+        }
+
+        }
+
 
 
 
@@ -58,6 +100,8 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/accounts/nbrAccountsInWork").permitAll()
                 .antMatchers("/accounts/orderedNbrScrapingAccounts/{min}/{max}").hasRole("ADMIN")
                 .antMatchers("/accounts/updateStatus/{id}").hasRole("ADMIN")
+                .antMatchers("/accounts/ScrapThiDay").permitAll()
+
                 //searches
                 .antMatchers(HttpMethod.POST,"/searches/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/searches/**").permitAll()
@@ -82,10 +126,18 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 ///Searches
                 .antMatchers("/profiles/SearchAll/{min}/{max}/{tunisia}/{categorie}/{profile}/{termes}").permitAll()
                 .antMatchers("/profiles/SearchName/{name}").hasRole("USER")
+                .antMatchers("/profiles/SearchName/{name}").hasRole("USER")
+
 
 
                 .anyRequest().authenticated() ;
     }
 
+    public List<Integer> getScrapingDays() {
+        return ScrapingDays;
+    }
 
+    public void setScrapingDays(List<Integer> scrapingDays) {
+        ScrapingDays = scrapingDays;
+    }
 }

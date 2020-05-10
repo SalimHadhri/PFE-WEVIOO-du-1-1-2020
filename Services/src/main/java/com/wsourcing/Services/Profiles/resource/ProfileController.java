@@ -375,6 +375,7 @@ else {
 
                         List<Profile> profileQuery = sequenceGeneratorServiceProfile.getMongoOperations().find(query, Profile.class);
 
+
                         if (profileQuery.size() != 0) {
                             existWord = true;
                         }

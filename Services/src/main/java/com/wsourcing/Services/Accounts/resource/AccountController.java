@@ -4,9 +4,9 @@ package com.wsourcing.Services.Accounts.resource;
 import com.wsourcing.Services.Accounts.model.Account;
 import com.wsourcing.Services.Accounts.repository.AccountRepository;
 import com.wsourcing.Services.Accounts.repository.DatabaseSequenceRepository;
+import com.wsourcing.Services.security.SecurityTokenConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.stereotype.Service;
+
 import org.springframework.web.bind.annotation.*;
 
 
@@ -15,6 +15,7 @@ import com.wsourcing.Services.Accounts.exception.AccountNotFoundException;
 import javax.validation.Valid;
 import java.util.ArrayList;
 
+import java.util.Collections;
 import java.util.List;
 
 @CrossOrigin()
@@ -218,4 +219,39 @@ public class AccountController {
         }
         accountRepository.save(account);
     }
+
+   //  List<Integer> ScrapingDays= new ArrayList<>(7);
+
+    @Autowired
+   private  SecurityTokenConfig securityTokenConfig ;
+
+    public AccountController(AccountRepository accountRepository, SecurityTokenConfig securityTokenConfig) {
+        this.accountRepository = accountRepository;
+        this.securityTokenConfig = securityTokenConfig;
+    }
+
+    //int c =0;
+    //NbrScrapingScheduled nbrScrapingScheduled=new NbrScrapingScheduled();
+
+    @GetMapping(value = "/ScrapThiDay")
+    public List<Integer> ScrapThiDay() {
+
+
+
+
+        return securityTokenConfig.getScrapingDays();
+       // nbrscrapin.ScrapEveryDay();
+        //int newScrapedProfiles = nbrScrapingDone() ;
+       //  z = nbrScrapingScheduled.ScrapEveryDay(c) ;
+       // c=z ;
+       // AccountController accountController=new AccountController() ;
+       // int d = accountController.getD() ;
+       // ScrapingDays.set(c,newScrapedProfiles) ;
+        //One day
+      //  nbrScrapingScheduled.ScrapEveryDay();
+      //  return ScrapingDays ;
+
+    }
+
+
 }
