@@ -11,7 +11,6 @@ import java.util.List;
 public interface AccountRepository extends MongoRepository<Account,Integer> {
 
     Account findById(long id) ;
-    Account findByLiat(String liAt) ;
 
 
 }

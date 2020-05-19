@@ -92,6 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/service/accounts/orderedNbrScrapingAccounts/{min}/{max}").permitAll()
                 .antMatchers("/service/accounts/updateStatus/{id}").permitAll()
                 .antMatchers("/service/accounts/ScrapThiDay").permitAll()
+                .antMatchers("/service/accounts/ExpiredLiat/{id}").permitAll()
                 //users
                 .antMatchers("/user/users/listUsers").permitAll()
                 .antMatchers("/user/users/addUser").permitAll()

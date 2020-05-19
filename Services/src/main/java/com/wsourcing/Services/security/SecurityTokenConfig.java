@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,10 +17,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 @Configuration
 @EnableWebSecurity
@@ -27,44 +34,46 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtProperties config;
 
-
-
-   @Autowired
+    @Autowired
     private AccountController accountController ;
+
+
 
     //@Bean
     //public AccountController Account() {
     //    return new AccountController();
-   // }
+    // }
 
     @Bean
     public JwtProperties jwtConfig() {
         return new JwtProperties();
     }
 
+   // @Autowired
+   // public JavaMailSender emailSender;
+
 
     private List<Integer> ScrapingDays= new ArrayList<>() ;
-
-
+/////////////////////////////////////////////////////////////////////////
 
 
 
 
     @Scheduled(cron = "1 * * * * ?",zone="Africa/Tunis")
     public void ScrapEveryDay() {
-       // AccountController accountController=new AccountController() ;
+        // AccountController accountController=new AccountController() ;
         int newScrapedProfiles = accountController.nbrScrapingDone();
 
 
         if(ScrapingDays.size()<7) {
-              ScrapingDays.add(newScrapedProfiles);
-          }
-          else{
-              ScrapingDays= new ArrayList<>();
+            ScrapingDays.add(newScrapedProfiles);
+        }
+        else{
+            ScrapingDays= new ArrayList<>();
             ScrapingDays.add(newScrapedProfiles);
         }
 
-        }
+    }
 
 
 
@@ -101,7 +110,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/accounts/orderedNbrScrapingAccounts/{min}/{max}").hasRole("ADMIN")
                 .antMatchers("/accounts/updateStatus/{id}").hasRole("ADMIN")
                 .antMatchers("/accounts/ScrapThiDay").permitAll()
-
+                .antMatchers("/accounts/ExpiredLiat/{id}").permitAll()
                 //searches
                 .antMatchers(HttpMethod.POST,"/searches/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/searches/**").permitAll()

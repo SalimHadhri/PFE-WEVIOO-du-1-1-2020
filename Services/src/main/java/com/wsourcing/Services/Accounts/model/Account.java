@@ -27,21 +27,13 @@ public class Account {
     private String etat;
     private int nb_scraping_jour;
     private int nb_scraping_actuel;
+    private boolean liatExpired ;
 
 
     public Account() {
     }
 
 
-    public Account(String name, String email, String url, String liat, String etat, int nb_scraping_jour, int nb_scraping_actuel) {
-        this.name = name;
-        this.email = email;
-        this.url = url;
-        this.liat = liat;
-        this.etat = etat;
-        this.nb_scraping_jour = nb_scraping_jour;
-        this.nb_scraping_actuel = nb_scraping_actuel;
-    }
 
     @Override
     public String toString() {
@@ -50,14 +42,24 @@ public class Account {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", url='" + url + '\'' +
-                ", li_at='" + liat + '\'' +
+                ", liat='" + liat + '\'' +
                 ", etat='" + etat + '\'' +
                 ", nb_scraping_jour=" + nb_scraping_jour +
                 ", nb_scraping_actuel=" + nb_scraping_actuel +
+                ", liatExpired=" + liatExpired +
                 '}';
     }
-
-    public Account(int id, String name, String email, String url, String liat, String etat, int nb_scraping_jour, int nb_scraping_actuel) {
+    public Account( @Length(min = 3, max = 10, message = "ici votre message") String name, String email, String url, String liat, String etat, int nb_scraping_jour, int nb_scraping_actuel, boolean liatExpired) {
+        this.name = name;
+        this.email = email;
+        this.url = url;
+        this.liat = liat;
+        this.etat = etat;
+        this.nb_scraping_jour = nb_scraping_jour;
+        this.nb_scraping_actuel = nb_scraping_actuel;
+        this.liatExpired = liatExpired;
+    }
+    public Account(long id, @Length(min = 3, max = 10, message = "ici votre message") String name, String email, String url, String liat, String etat, int nb_scraping_jour, int nb_scraping_actuel, boolean liatExpired) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -66,6 +68,15 @@ public class Account {
         this.etat = etat;
         this.nb_scraping_jour = nb_scraping_jour;
         this.nb_scraping_actuel = nb_scraping_actuel;
+        this.liatExpired = liatExpired;
+    }
+
+    public boolean isLiatExpired() {
+        return liatExpired;
+    }
+
+    public void setLiatExpired(boolean liatExpired) {
+        this.liatExpired = liatExpired;
     }
 
     public static String getSequenceName() {
