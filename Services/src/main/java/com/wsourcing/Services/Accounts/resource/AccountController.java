@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import com.wsourcing.Services.Accounts.exception.AccountNotFoundException;
 
 import javax.mail.*;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
@@ -59,7 +60,15 @@ public class AccountController {
     @GetMapping(value = "/listAccounts")
     public List<Account> getAllAccounts() {
         // LOGGER.info("findAll");
-        return accountRepository.findAll();
+        List<Account> Accounts = accountRepository.findAll();
+        List<Account> accountsLiatnotExpired =  new ArrayList<>();
+        for (int i =0 ; i<Accounts.size();i++){
+
+            if(!Accounts.get(i).isLiatExpired()){
+                accountsLiatnotExpired.add(Accounts.get(i)) ;
+            }
+        }
+        return accountsLiatnotExpired ;
 
     }
 
@@ -252,19 +261,46 @@ public class AccountController {
 
 
 
-/*
-    public void sendMail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
+    public void sendMail (String toEmail , String subject , String body) throws GeneralSecurityException, MessagingException {
+
+        final String username = "hadhrisalim10@gmail.com";
+        final String password = "FernandoFernando";
+
+        Properties props = new Properties();
+
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.localhost", "localhost");
+        props.put("mail.smtp.host", "smtp.gmail.com");//
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.debug", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.user", "hadhrisalim10@gmail.com") ;
+        props.put("mail.smtp.password", "FernandoFernando") ;
+
+
+        MailSSLSocketFactory sf = new MailSSLSocketFactory();
+        sf.setTrustedHosts(new String[]{"smtp.gmail.com"});
+        props.put("mail.smtp.ssl.socketFactory", sf);
+
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        session.setDebug(true) ;
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("hadhrisalim10@gmail.com"));//formBean.getString("fromEmail")
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail)); ;
+        message.setSubject(subject);//formBean.getString(
         message.setText(body);
-        mailSender.send(message);
+
+        Transport.send(message);
+
     }
-*/
-
-
-   // @Autowired
-   // private JavaMailSender  javaMailSender ;
 
 
 
@@ -282,147 +318,7 @@ public class AccountController {
             AccountLiatExpiredDetails.setUrlLinkdin(accountExpiredOrNot.getUrl());
 
 
-/*
-            final MimeMessage mail = javaMailSender.createMimeMessage();
-            final MimeMessageHelper helper = new MimeMessageHelper( mail, true );
-            helper.setTo( accountExpiredOrNot.getEmail() );
-            helper.setSubject( "Notification" );
-            helper.setText( "text/html", "haha" );
-            javaMailSender.send( mail );
-*/
-         /*   SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setTo("hadhrisalim@gmail.com");
-            msg.setSubject("Liat expired");
-            msg.setText("trhr");
-            this.javaMailSender.send(msg);*/
-/////////////////////////////////////////////////////////////////////////////////////
-
-
-
-            final String username = "hadhrisalim10@gmail.com";
-            final String password = "FernandoFernando";
-
-            Properties props = new Properties();
-
-            //Properties props = (Properties)System.getProperties().clone();
-            //props.put("mail.transport.protocol", "smtps");
-           // props.put("mail.protocol.ssl.trust", "*");
-
-             props.put("mail.transport.protocol", "smtp");
-            props.put("mail.smtp.localhost", "localhost");
-            props.put("mail.protocol.ssl.trust", "*");
-            props.put("mail.smtp.host", "smtp.gmail.com");//
-            props.put("mail.smtp.port", "587");//
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.debug", "true");
-            props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.user", "hadhrisalim10@gmail.com") ;//
-            props.put("mail.smtp.password", "FernandoFernando") ;//
-
-
-            MailSSLSocketFactory sf = new MailSSLSocketFactory();
-            sf.setTrustAllHosts(true);
-            props.put("mail.smtp.ssl.socketFactory", sf);
-
-          //  props.put("mail.smtps.auth", "true");
-          //  props.put("mail.smtp.starttls.enable", "false");
-           // props.put("mail.smtps.debug", "true");
-
-
-           //  props.put("mail.smtp.ssl.enable", "false");
-
-
-         // props.put("mail.smtp.debug", "true");
-
-
-          //  props.put("mail.smtp.socketFactory.port", "465");
-           // props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-           // props.put("mail.smtp.socketFactory.fallback", "false") ;
-
-            // props.put("mail.smtp.starttls.enable", "true");
-             //props.put("mail.smtps.ssl.enable", "true");
-            //props.put("mail.smtp.starttls.required ", "true");
-
-
-
-
-            //props.put("mail.debug", "true");
-
-
-
-            //Session session = Session.getInstance(props) ;
-
-
-            //props.put("mail.smtp.socketFactory.port", 465) ;
-            //props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory") ;
-           // props.put("mail.smtp.socketFactory.fallback", "false") ;
-
-                    //////////////////////////
-
-
-            Session session = Session.getInstance(props,
-                    new javax.mail.Authenticator() {
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(username, password);
-                        }
-                    });
-
-            session.setDebug(true) ;
-           // Session session = Session.getDefaultInstance(props);
-
-
-                Message message = new MimeMessage(session);
-               // message.setRecipients(Message.RecipientType.TO,new InternetAddress(accountExpiredOrNot.getEmail()));
-            /*  */   message.setFrom(new InternetAddress("hadhrisalim10@gmail.com"));//formBean.getString("fromEmail")
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(accountExpiredOrNot.getEmail())); ;
-
-            message.setSubject("Liat expired");//formBean.getString(
-                message.setText("Your liat ( "+ accountExpiredOrNot.getLiat() + " is expired!!");
-
-
-            Transport.send(message);
-
-            //  message.setContent("Your liat ( "+ accountExpiredOrNot.getLiat() + " is expired!!","text/html");
-//,InternetAddress.parse(accountExpiredOrNot.getEmail()
-
-              /*  Transport transport=session.getTransport();////////////
-                transport.connect("smtp.gmail.com",465 ,"salim hadhri","FernandoFernando");
-                transport.sendMessage(message,message.getAllRecipients() );
-                transport.close();
-*/
-            // Transport.send(message, "hadhrisalim10@gmail.com", "FernandoFernando");
-            //transport.connect("hadhrisalim10@gmail.com", "FernandoFernando");
-
-           // InternetAddress.parse(accountExpiredOrNot.getEmail())
-               // transport.sendMessage(message, InternetAddress.parse(accountExpiredOrNot.getEmail()));//(message);
-               // System.out.println("Done");
-            //  Transport transport=session.getTransport();
-            //transport.connect();
-            //  transport.sendMessage(message, InternetAddress.parse(accountExpiredOrNot.getEmail()));//(message);
-
-
-            //Transport.send(message, "hadhrisalim10@gmail.com", "FernandoFernando");
-            /*Transport transport=session.getTransport("smtp");
-            try
-            {
-                System.out.println("Sending...");
-                 //Connect to Amazon SES using the SMTP username and password you specified above.
-                transport.connect("smtp.gmail.com",465,"hadhrisalim10@gmail.com","FernandoFernando");
-                System.out.println("connected");
-
-                // Send the email.
-                transport.sendMessage(message, message.getAllRecipients());
-                System.out.println("Email sent!");
-            }
-            catch (Exception ex) {
-                System.out.println("The email was not sent.");
-                System.out.println("Error message: " + ex.getMessage());
-            }
-           finally
-            {
-                // Close and terminate the connection.
-                transport.close();
-            }*/
+            sendMail(accountExpiredOrNot.getEmail(),"LIAT EXPIRED","Your liat ( "+ accountExpiredOrNot.getLiat() + " ) is expired!!") ;
         }
 
            else{
@@ -434,320 +330,18 @@ public class AccountController {
 
     }
 
+    @PutMapping(value = "/liatToExpired/{id}")
+    public void liatToExpired (@PathVariable int id) throws GeneralSecurityException, MessagingException {
+
+        Account account = accountRepository.findById(id) ;
+        account.setLiatExpired(true);
+        sendMail(account.getEmail(),"Change your liat",account.getName()+", your liat is expired. Please change it!");
+
+        updateAccount(id,account) ;
+    }
+
 
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/* String  d_email = "hadhrisalim8@gmail.com";
-          String   d_uname = "hadhrisalim8" ;
-
-                    String      d_password = "DkPB7D+DkPB7D+";
-            String    d_host = "smtp.gmail.com" ;
-            String      d_port  = "465"; //465,587
-            String      m_to = accountExpiredOrNot.getEmail() ;
-            String      m_subject = "Testing" ;
-            String     m_text = "This is a test.";
-
-            Properties props = new Properties() ;
-            props.put("mail.smtp.user", d_email) ;
-            props.put("mail.smtp.host",d_host ) ;
-            props.put("mail.smtps.port", d_port) ;
-            props.put("mail.smtp.starttls.enable","true") ;
-            props.put("mail.smtp.debug", "true");
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.socketFactory.port", d_port);
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            props.put("mail.smtp.socketFactory.fallback", "false");
-
-
-
-
-
-            SMTPAuthenticator auth = new SMTPAuthenticator();
-            Session session = Session.getInstance(props, auth) ;
-            session.setDebug(true);
-
-            MimeMessage msg = new MimeMessage(session) ;
-            msg.setText(m_text) ;
-            msg.setSubject(m_subject) ;
-            msg.setFrom(new InternetAddress(d_email)) ;
-            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(m_to)) ;
-
-            Transport transport = session.getTransport("smtps");
-            transport.connect(d_host, 465, d_uname, d_password);
-            transport.sendMessage(msg, msg.getAllRecipients());
-            transport.close();*/
-/*   Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-
-            //  @Autowired
-            //   private JavaMailSender mailSender;
-
-    private static class SMTPAuthenticator extends Authenticator
-    {
-        public PasswordAuthentication getPasswordAuthentication()
-        {
-            return new PasswordAuthentication("hadhrisalim8@gmail.com", "DkPB7D+DkPB7D+");
-        }
-    }
-
-
-          Properties props = new Properties() ;
-
-            props.put("mail.transport.protocol", "smtps");
-                    props.put("mail.smtps.host", "smtp.gmail.com");
-                    props.put("mail.smtps.auth", "true");
-                    props.put("mail.smtps.starttls.enable","true") ;
-                    props.put("mail.smtps.debug","true")   ;
-                    props.put("mail.smtps.port", "465");
-
-                    // props.put("mail.smtps.socketFactory.fallback", "false");
-                    //     props.put("mail.smtps.quitwait", "false");
-
-                    props.put("mail.smtps.ssl.enable", "true");
-
-                    //props.put("mail.smtps.socketFactory.port", "465");
-                    //props.put("mail.smtps.socketFactory.class",
-                    //"javax.net.ssl.SSLSocketFactory");
-
-                    // MailSSLSocketFactory sf = new MailSSLSocketFactory();
-                    //   sf.setTrustedHosts("smtp.gmail.com");
-                    // props.put("mail.smtps.ssl.socketFactory", sf);
-                    props.put("mail.smtps.ssl.checkserveridentity", "true");
-                    props.put("mail.smtps.ssl.trust", "*");
-
-
-
-                    Session session = Session.getDefaultInstance(props,
-                    new javax.mail.Authenticator() {
-protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication("hadhrisalim8@gmail.com", "DkPB7D+DkPB7D+");
-        }
-        });
-        session.setDebug(true);
-        MimeMessage message = new MimeMessage(session);
-        message.setSender(new InternetAddress("hadhrisalim8@gmail.com"));
-        message.setSubject("liat expired");
-        message.setContent("liat expired", "text/plain");
-        //     if (accountExpiredOrNot.getEmail().indexOf(',') > 0)
-        //      message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(accountExpiredOrNot.getEmail()));
-        //      else
-        message.setRecipient(Message.RecipientType.TO, new InternetAddress(accountExpiredOrNot.getEmail()));
-
-        //  587
-        //Transport transport = session.getTransport(session.getProvider("smtps"));
-        Transport transport = session.getTransport("smtps");
-        //transport.connect("hadhrisalim8@gmail.com","DkPB7D+DkPB7D+");
-        transport.connect("smtp.gmail.com",465,"hadhrisalim8@gmail.com","DkPB7D+DkPB7D+");
-        // transport.connect(d_host, 587, d_uname, d_password);
-        transport.sendMessage(message,message.getAllRecipients());
-        //InternetAddress.parse(accountExpiredOrNot.getEmail())
-        transport.close();
-//Transport.send(message);*/
-
-
-
-
-
-
-
-
-
-
-/*
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-    String  d_email ="hadhrisalim8@gmail.com" ;
-    String     d_uname = "hadhrisalim8" ;
-    String     d_password = "DkPB7D+DkPB7D+" ;
-    String     d_host = "smtp.gmail.com" ;
-    String     d_port  = "465"; //465,587
-    String     m_to = accountExpiredOrNot.getEmail()    ;
-    String     m_subject = "Liat expired"  ;
-    String     m_text = "Your liat is expired" ;
-
-
-    ///////////////////////////////////////////////////
-
-
-    Properties propsSSL = new Properties();
-            propsSSL.put("mail.transport.protocol", "smtp");
-                    propsSSL.put("mail.smtp.host", "smtp.gmail.com");
-                    propsSSL.put("mail.smtp.auth", "true");
-                    propsSSL.put("mail.smtps.ssl.checkserveridentity", "false");
-                    propsSSL.put("mail.smtps.ssl.trust", "*");
-                    propsSSL.put("mail.smtp.port", "465");
-                    propsSSL.put("mail.smtp.starttls.enable","true") ;
-                    propsSSL.put("mail.smtps.socketFactory.class", "javax.net.ssl.SSLSocketFactory") ;
-                    // propsSSL.put("mail.smtps.user", "hadhrisalim8@gmail.com");
-                    // propsSSL.put("mail.smtps.password", "DkPB7D+DkPB7D+");
-                    propsSSL.put("mail.smtps.socketFactory.port", "465") ;
-
-                    MailSSLSocketFactory sf = new MailSSLSocketFactory();
-                    sf.setTrustAllHosts(true);
-                    propsSSL.put("mail.smtps.ssl.socketFactory", sf);
-                    propsSSL.setProperty("mail.smtps.ssl.enable", "true");
-
-
-            Properties props = new Properties() ;
-
-            props.put("mail.smtp.user", d_email) ;
-            props.put("mail.smtp.host", d_host) ;
-            props.put("mail.smtp.port", d_port);
-            props.put("mail.smtp.starttls.enable","true") ;
-            props.put("mail.smtp.debug", "true");
-            props.put("mail.smtp.auth", "true") ;
-            props.put("mail.smtp.socketFactory.port", "465") ;
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory") ;
-            props.put("mail.smtp.socketFactory.fallback", "false") ;
-          //  props.put("mail.smtp.ssl.trust", "*");
-           // props.put("mail.smtp.ssl.checkserveridentity", "true");
-            props.put("mail.smtps.ssl.checkserveridentity", "false");
-
-           // props.put("mail.smtp.ssl.enable", "true");
-           // props.put("mail.transport.protocol", "smtp");
-
-            MailSSLSocketFactory sf = new MailSSLSocketFactory();
-
-            sf.setTrustAllHosts(true);
-
-            props.setProperty("mail.smtp.ssl.enable", "true");
-            props.setProperty("mail.protocol.ssl.trust", "smtp.gmail.com");
-            props.put("mail.smtps.ssl.socketFactory", sf);
-            props.setProperty("mail.smtps.port", "465");
-
-          //  MailSSLSocketFactory sf = new MailSSLSocketFactory();
-            //sf.setTrustedHosts("smtp.gmail.com");
-            //props.put("mail.smtp.ssl.socketFactory", sf);
-
-          //  MailSSLSocketFactory socketFactory= new MailSSLSocketFactory();
-          //  socketFactory.setTrustedHosts("smtp.gmail.com");
-           // props.put("mail.smtp.ssl.socketFactory", socketFactory);
-
-           // MailSSLSocketFactory socketFactory = new MailSSLSocketFactory();
-            //socketFactory.setTrustedHosts(d_host);
-            //socketFactory.setTrustAllHosts(true);
-            //props.put("mail.smtps.socketFactory", socketFactory);
-
-
-            MailSSLSocketFactory sf = new MailSSLSocketFactory();
-            sf.setTrustedHosts("smtp.gmail.com");
-            props.put("mail.smtp.ssl.enable", "true");
-            // also use following for additional safety
-            props.put("mail.smtp.ssl.socketFactory", sf);
-            props.put("mail.smtp.ssl.checkserveridentity", "true");
-
-                    // props.put("mail.smtps.ssl.trust", "*");
-
-
-                    // props.put("mail.smtps.ssl.trust", "*");
-                    //props.put("mail.smtps.ssl.checkserveridentity", "true");
-
-                    //props.put("mail.smtps.ssl.checkserveridentity", "false");
-                    //props.put("mail.smtps.ssl.trust", "*");
-
-
-
-                    //  SMTPAuthenticator  auth = new SMTPAuthenticator();
-                    // Session session = Session.getInstance(props, auth) ;
-
-
-                    Session session = Session.getInstance(propsSSL,
-                    new javax.mail.Authenticator() {
-protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication("hadhrisalim8@gmail.com", "DkPB7D+DkPB7D+");
-        }
-        });
-
-        session.setDebug(true);
-
-        //  Session session = Session.getInstance(propsSSL);
-
-        Message msg = new MimeMessage(session) ;
-        msg.setText(m_text) ;
-        msg.setSubject(m_subject) ;
-        msg.setFrom(new InternetAddress("hadhrisalim8@gmail.com")) ;
-        msg.addRecipient(Message.RecipientType.TO, new InternetAddress(accountExpiredOrNot.getEmail())) ;
-
-
-        Transport transport = session.getTransport("smtp");
-        //transport.connect("hadhrisalim8@gmail.com","DkPB7D+DkPB7D+");
-        transport.connect("smtp.gmail.com",465,"hadhrisalim8@gmail.com","DkPB7D+DkPB7D+");
-        // transport.connect(d_host, 587, d_uname, d_password);
-        transport.sendMessage(msg, msg.getAllRecipients());
-        transport.close();
-
-        //  Transport.send(msg);
-
-        }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        else{
-*/
-
-
-/*
-
-          //  final String username = "hadhrisalim8@gmail.com";
-          //  final String password = "DkPB7D+DkPB7D+";
-        Properties props = new Properties();
-          /*  props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtps.ssl.checkserveridentity", "true");
-            props.put("mail.smtps.ssl.trust", "*");
-            props.put("mail.smtp.host", "server.com");
-            props.put("mail.smtp.port", "465");
-            props.put("mail.smtp.protocol", "smtp");
-
-            props.put("mail.smtp.auth", "true");
-                    props.put("mail.smtp.host", "smtp.gmail.com");
-                    props.put("mail.smtp.port", "465");
-                    props.put("mail.smtp.protocol", "smtp");
-                    props.put("mail.smtp.starttls.enable", "true");
-                    ///
-                    // props.put("mail.smtp.ssl.checkserveridentity", "true");
-                    //  props.put("mail.smtp.ssl.trust", "*");
-                    ///
-                    props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-                    props.put("mail.debug", "true");
-                    props.put("mail.smtp.socketFactory.port", "465");
-                    props.put("mail.smtp.user", "hadhrisalim10@gmail.com");
-                    props.put("mail.smtp.password", "FernandoFernando");
-
-
-
-
-                    //Session session = Session.getDefaultInstance(props);
-
-
-                    Session session = Session.getInstance(props,
-                    new javax.mail.Authenticator() {
-protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication("hadhrisalim10@gmail.com", "DkPB7D+DkPB7D+");
-        }
-        });
-
-        try {
-        Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress("hadhrisalim10@gmail.com"));
-
-        msg.setRecipients(  Message.RecipientType.TO,
-        InternetAddress.parse(accountExpiredOrNot.getEmail()));
-        msg.setSubject("Liat expired");
-        msg.setSentDate(new Date());
-        // set plain text message
-        msg.setText("your liat has been expired");
-
-        Transport.send(msg);
-        } catch (MessagingException e) {
-        throw new RuntimeException(e);
-        }*/

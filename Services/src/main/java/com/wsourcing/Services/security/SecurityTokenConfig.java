@@ -111,6 +111,8 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/accounts/updateStatus/{id}").hasRole("ADMIN")
                 .antMatchers("/accounts/ScrapThiDay").permitAll()
                 .antMatchers("/accounts/ExpiredLiat/{id}").permitAll()
+                .antMatchers("/accounts/liatToExpired/{id}").permitAll()
+
                 //searches
                 .antMatchers(HttpMethod.POST,"/searches/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/searches/**").permitAll()
