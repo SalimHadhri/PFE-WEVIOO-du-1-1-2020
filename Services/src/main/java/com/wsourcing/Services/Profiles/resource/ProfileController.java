@@ -2,17 +2,11 @@ package com.wsourcing.Services.Profiles.resource;
 
 
 
-import ch.qos.logback.core.spi.AbstractComponentTracker;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.wsourcing.Services.Accounts.model.Account;
 import com.wsourcing.Services.Profiles.exception.ProfileNotFoundException;
 import com.wsourcing.Services.Profiles.model.Profile;
-import com.wsourcing.Services.Profiles.model.Skill2;
 import com.wsourcing.Services.Profiles.repository.ProfileRepository;
 import com.wsourcing.Services.Profiles.service.SequenceGeneratorServiceProfile;
 
-import org.apache.catalina.Manager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -23,7 +17,6 @@ import javax.validation.Valid;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @CrossOrigin()
 @RestController
@@ -32,6 +25,8 @@ public class ProfileController {
 
     @Autowired
     private ProfileRepository profileRepository;
+
+
 
     @Autowired
     private SequenceGeneratorServiceProfile sequenceGeneratorServiceProfile;
@@ -70,6 +65,9 @@ public class ProfileController {
         return profileRepository.findAll();
 
     }
+
+
+
 
     @GetMapping(value = "/findProfile/{id}")
     public Profile findProfileById(@PathVariable int id) throws ProfileNotFoundException {

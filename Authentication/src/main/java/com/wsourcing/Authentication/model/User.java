@@ -32,13 +32,7 @@ public class User {
 
     private String permissions = "";
 
-   /* public User(String username, String password, String roles, String permissions){
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
-        this.permissions = permissions;
-        this.active = 1;
-    }*/
+
 
     public User(String username, String password, int active, String roles, String permissions) {
         this.username = username;
@@ -48,7 +42,7 @@ public class User {
         this.permissions = permissions;
     }
 
-    protected User(){}
+    public User(){}
 
     public static String getSequenceName() {
         return SEQUENCE_NAME;

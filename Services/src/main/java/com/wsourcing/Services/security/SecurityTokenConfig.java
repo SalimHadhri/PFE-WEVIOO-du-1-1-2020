@@ -49,8 +49,8 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
         return new JwtProperties();
     }
 
-   // @Autowired
-   // public JavaMailSender emailSender;
+    // @Autowired
+    // public JavaMailSender emailSender;
 
 
     private List<Integer> ScrapingDays= new ArrayList<>() ;

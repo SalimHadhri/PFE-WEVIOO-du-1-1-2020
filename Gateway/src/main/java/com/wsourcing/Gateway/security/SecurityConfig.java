@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //private BasicAuthenticationEntryPoint authenticationEntryPoint ;
     //=> we don't have multiple security runs in here  */
 
-   // @Autowired
+    // @Autowired
     public void SecurityConfiguration(  UserPrincipalDetailsService userPrincipalDetailsService, UserRepository userRepository) {
         this.userPrincipalDetailsService = userPrincipalDetailsService; //injected directly into the security configuration
         this.userRepository = userRepository;
@@ -65,8 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .logout().disable()
                 .formLogin().disable()
-               // .logout().disable()
-               // .formLogin().disable()
+                // .logout().disable()
+                // .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 // make sure we use stateless session; session won't be used to store user's state.
@@ -80,6 +80,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //authentication
                 .antMatchers("/user/users/auth").permitAll()
+                .antMatchers("/user/users/authBackround").permitAll()
+
                 //accounts
                 .antMatchers("/service/accounts/listAccounts").permitAll()
                 .antMatchers("/service/accounts/addAccount").permitAll()
@@ -146,8 +148,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-     @Bean
-     PasswordEncoder passwordEncoder() {
+    @Bean
+    PasswordEncoder passwordEncoder() {
         PasswordEncoder encoder = new BCryptPasswordEncoder(); // or any other compatible encoder
         return encoder;
     }
