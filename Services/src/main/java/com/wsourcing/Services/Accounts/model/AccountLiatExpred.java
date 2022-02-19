@@ -1,13 +1,9 @@
 package com.wsourcing.Services.Accounts.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-
+//expired Account data
 public class AccountLiatExpred {
-
-
 
 
 

@@ -1,5 +1,6 @@
 package com.wsourcing.Services.Profiles.model;
 
+
 public class Skill {
 
     private int java ;

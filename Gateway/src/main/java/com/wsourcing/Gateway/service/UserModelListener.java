@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventLis
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Component;
 
+//Used for the auto-generate method developed above
+//Auto-generate long USER id is forbidden in MongoDB
 @Component
 public class UserModelListener extends AbstractMongoEventListener<User> {
 

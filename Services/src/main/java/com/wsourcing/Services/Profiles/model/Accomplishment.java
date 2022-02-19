@@ -3,6 +3,7 @@ package com.wsourcing.Services.Profiles.model;
 
 import java.util.ArrayList;
 
+//Candidates accomplishments found on LINKDIN profiles
 public class Accomplishment {
 
     private ArrayList<String>  publications ;

@@ -10,9 +10,12 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import java.util.Objects;
 
+
+
+//Used for the auto-generate method developed above
+//Auto-generate long User id is forbidden in MongoDB
 @Service
 public class SequenceGeneratorServiceSearch {
 

@@ -1,5 +1,7 @@
 package com.wsourcing.Services.Profiles.model;
 
+
+//Computer skills mastered by the candidate with the number of endorsements, approvements by his network connected persons
 public class Skill2 {
 
     private String name ;

@@ -2,11 +2,12 @@ package com.wsourcing.Authentication.service;
 
 import com.wsourcing.Authentication.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Component;
 
+//Used for the auto-generate method developed above
+//Auto-generate long User id is forbidden in MongoDB
 @Component
 public class UserModelListener extends AbstractMongoEventListener<User> {
 

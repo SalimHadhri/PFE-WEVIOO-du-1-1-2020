@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,16 +13,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.mail.Session;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 
+
+
+/*create custom security configuration class:
+    @Configuration
+    @EnableWebSecurity
+    extends WebSecurityConfigurerAdapter
+ */
 @Configuration
 @EnableWebSecurity
 @EnableScheduling
@@ -37,33 +35,25 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AccountController accountController ;
 
-
-
-    //@Bean
-    //public AccountController Account() {
-    //    return new AccountController();
-    // }
-
     @Bean
     public JwtProperties jwtConfig() {
         return new JwtProperties();
     }
 
-    // @Autowired
-    // public JavaMailSender emailSender;
-
-
     private List<Integer> ScrapingDays= new ArrayList<>() ;
-/////////////////////////////////////////////////////////////////////////
 
 
-
-
+    /*
+    This function make us follow the number of scraping done for each day for a week
+    When the week is over, we begin a different follow for the new week
+    We used this function to create a graph which represent the flow of the number scraping done per day for a week
+    With the right data given to the cron, we choose the delay by which the instructions in the function are carried out
+    In this example, for testing, I put the delay equal to 1 min.  Each 1 minute we have another calculation of the number of scraping done
+     */
     @Scheduled(cron = "1 * * * * ?",zone="Africa/Tunis")
     public void ScrapEveryDay() {
-        // AccountController accountController=new AccountController() ;
-        int newScrapedProfiles = accountController.nbrScrapingDone();
 
+        int newScrapedProfiles = accountController.nbrScrapingDone();
 
         if(ScrapingDays.size()<7) {
             ScrapingDays.add(newScrapedProfiles);
@@ -72,11 +62,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
             ScrapingDays= new ArrayList<>();
             ScrapingDays.add(newScrapedProfiles);
         }
-
     }
-
-
-
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -99,20 +85,19 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/accounts/**").permitAll()
                 .antMatchers(HttpMethod.DELETE,"/accounts/**").permitAll()
                 .antMatchers(HttpMethod.PUT,"/accounts/**").permitAll()
-                .antMatchers("/accounts/listAccounts").permitAll()
+                .antMatchers("/accounts/listAccounts").hasAnyRole("MANAGER","USER")
                 .antMatchers("/accounts/addAccount").hasRole("ADMIN")
                 .antMatchers("/accounts/deleteAccount/{id}").hasAnyRole("ADMIN","MANAGER")
-                .antMatchers("/accounts/updateAccount/{id}").hasRole("ADMIN")
-                .antMatchers("/accounts/findAccount/{id}").hasRole("USER")
+                .antMatchers("/accounts/updateAccount/{id}").permitAll()
+                .antMatchers("/accounts/findAccount/{id}").permitAll()
                 .antMatchers("/accounts/minAccount").permitAll()
-                .antMatchers("/accounts/nbrScrapingDone").hasRole("MANAGER")
+                .antMatchers("/accounts/nbrScrapingDone").permitAll()
                 .antMatchers("/accounts/nbrAccountsInWork").permitAll()
-                .antMatchers("/accounts/orderedNbrScrapingAccounts/{min}/{max}").hasRole("ADMIN")
-                .antMatchers("/accounts/updateStatus/{id}").hasRole("ADMIN")
+                .antMatchers("/accounts/orderedNbrScrapingAccounts/{min}/{max}").permitAll()
+                .antMatchers("/accounts/updateStatus/{id}").permitAll()
                 .antMatchers("/accounts/ScrapThiDay").permitAll()
                 .antMatchers("/accounts/ExpiredLiat/{id}").permitAll()
                 .antMatchers("/accounts/liatToExpired/{id}").permitAll()
-
                 //searches
                 .antMatchers(HttpMethod.POST,"/searches/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/searches/**").permitAll()
@@ -140,9 +125,6 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profiles/SearchName/{name}").hasRole("USER")
                 .antMatchers("/profiles/SearchName/{name}").hasRole("USER")
                 .antMatchers("/profiles/SearchSimilarProfiles/{profile}/{termes}").hasRole("USER")
-
-
-
 
                 .anyRequest().authenticated() ;
     }

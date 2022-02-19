@@ -1,31 +1,36 @@
 package com.wsourcing.Services.Searches.model;
 
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.ArrayList;
 
+
+//Define the state of a search for a precise organism
+//Define different datas relating to the search on one precise organism
 @Document(collection = "searches")
 public class Search {
 
+
+    //Used to auto-generate ACCOUNT id with long type in the database
+    //mongodb id is a STRING type without auto-generate function
     @Transient
     public static final String SEQUENCE_NAME = "searches_sequence";
 
     @Id
     private long id ;
-
     private String searchName;
     private ArrayList<String> mandatorySkills;
     private ArrayList<String> optionalSkills;
+    //no more searches on this organism
     private boolean isHalted ;
     private int totalURLsFound ;
     private int totalNewUrls ;
     private int totalDistinctURLs;
     private int totalProfilesScraped ;
+    //the priority of this search for this specified organism
     private int urgency ;
-
+    //organism on which the searche are going on
     private String organisme ;
 
     public Search() {

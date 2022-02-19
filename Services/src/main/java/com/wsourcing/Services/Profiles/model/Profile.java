@@ -3,14 +3,16 @@ package com.wsourcing.Services.Profiles.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.ArrayList;
 import java.util.List;
 
+
+//Candidates profile which we will search on them with the adequate criteria
 @Document(collection = "profiles")
 public class Profile {
 
-
+    //Used to auto-generate Profile id with long type in the database
+    //mongodb id is a STRING type without auto-generate function
     @Transient
     public static final String SEQUENCE_NAME = "profiles_sequence";
 
@@ -20,15 +22,12 @@ public class Profile {
     private Accomplishment accomplishments ;
     private Experience experiences ;
     private ArrayList<String> interests ;
-
     private PersonalInfo personal_info ;
-
     private ScrapedTime scraped_time ;
     private String search ;
     private List<Skill2> skills ;
-
     private String url;
-private String name;
+    private String name;
     private String headline;
     private String company;
     private String school;

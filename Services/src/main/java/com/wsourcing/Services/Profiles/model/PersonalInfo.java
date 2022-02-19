@@ -2,6 +2,8 @@ package com.wsourcing.Services.Profiles.model;
 
 import java.util.ArrayList;
 
+
+//Personal infos relating to the candidate
 public class PersonalInfo {
 
     private String name;

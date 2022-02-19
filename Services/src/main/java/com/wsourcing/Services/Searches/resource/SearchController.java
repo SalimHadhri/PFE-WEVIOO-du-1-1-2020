@@ -1,19 +1,18 @@
 package com.wsourcing.Services.Searches.resource;
 
 
-import com.wsourcing.Services.Accounts.exception.AccountNotFoundException;
-import com.wsourcing.Services.Accounts.model.Account;
 import com.wsourcing.Services.Searches.exception.SearchNotFoundException;
 import com.wsourcing.Services.Searches.model.Search;
 import com.wsourcing.Services.Searches.repository.DatabaseSequenceSearchRepository;
 import com.wsourcing.Services.Searches.repository.SearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//Controller related to our Search class
 @CrossOrigin()
 @RestController
 @RequestMapping("/searches")
@@ -29,6 +28,7 @@ public class SearchController {
         this.searchRepository = searchRepository;
     }
 
+    //Add a Search to database
     @CrossOrigin()
     @PostMapping(value = "/addSearch")
     public void addSearch(@Valid @RequestBody Search search) {
@@ -36,7 +36,7 @@ public class SearchController {
     }
 
 
-
+    //Show all Searchs stored in our mongoDB database
     @CrossOrigin(origins = "https://localhost:4200/**")
     @GetMapping(value = "/listSearches")
     public List<Search> getAllSearches() {
@@ -45,6 +45,7 @@ public class SearchController {
 
     }
 
+    //Find a Search from database according to his id
     @GetMapping(value = "/findSearch/{id}")
     public Search findSearchById(@PathVariable int id) throws SearchNotFoundException {
         Search search= searchRepository.findById(id);
@@ -52,6 +53,7 @@ public class SearchController {
         return search ;
     }
 
+    //Delete a Search by his id
     @DeleteMapping(value = "/deleteSearch/{id}")
     public void deleteSearchById(@PathVariable int id) throws SearchNotFoundException{
         Search search = searchRepository.findById(id);
@@ -59,6 +61,8 @@ public class SearchController {
         searchRepository.deleteById((int) search.getId());
     }
 
+    // Update a Search with the id == id
+    // New Search data are given on a form
     @PutMapping(value = "/updateSearch/{id}")
     public void updateSearch(@PathVariable int id, @RequestBody Search search) throws SearchNotFoundException{
         Search search1 = searchRepository.findById(id) ;
@@ -70,6 +74,8 @@ public class SearchController {
         }
     }
 
+    //Start or stop the search on this organism
+    //make isHalted true or false by reversing his actual state
     @PutMapping(value = "/StartOrStopSearch/{id}")
     public void StartOrStopSearch(@PathVariable int id) throws SearchNotFoundException {
 
@@ -77,7 +83,7 @@ public class SearchController {
         if (search == null) {
             throw new SearchNotFoundException("the search with id "+id+" don't exist") ;
         }
-        if(search.isHalted() == true){
+        if(search.isHalted()){
             search.setHalted(false);
         }
         else{
@@ -86,6 +92,7 @@ public class SearchController {
         searchRepository.save(search);
     }
 
+    //Return the list of the searches for this organism
     public List<Search> findSearchList(String organisme){
 
         List<Search> searches = searchRepository.findAll();
@@ -100,10 +107,12 @@ public class SearchController {
         return seachesOrganisme ;
     }
 
+    //Return the prioritised search and not halted for an organism depending on his urgency data
     @GetMapping(value = "/findPrioritisedSearch/{organisme}")
     public Search findPrioritisedSearch(@PathVariable String organisme) throws SearchNotFoundException {
 
         List<Search> searches = this.findSearchList(organisme) ;
+
         if (searches == null) {
             throw new SearchNotFoundException("No searches for this organism") ;
         }
@@ -112,7 +121,7 @@ public class SearchController {
 
         for (int i =0 ; i<searches.size();i++){
 
-            if ( searches.get(i).isHalted()==false){
+            if (!searches.get(i).isHalted()){
                 seachesInWork.add(searches.get(i)) ;
             }
         }

@@ -1,12 +1,14 @@
 package com.wsourcing.Services.Profiles.model;
 
+
+//Datas relating to his volunteer experience
 public class Volunteer {
 
-    private  String title ;
+    private String title ;
     private String company ;
-    private String         date_range ;
+    private String date_range ;
     private String location ;
-    private String         cause ;
+    private String  cause ;
     private String description ;
 
     public Volunteer() {

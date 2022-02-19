@@ -1,13 +1,14 @@
 package com.wsourcing.Services.Profiles.service;
 
-
-
 import com.wsourcing.Services.Profiles.model.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Component;
 
+
+//Used for the auto-generate method developed above
+//Auto-generate long User id is forbidden in MongoDB
 @Component
 public class ProfileModelListener extends AbstractMongoEventListener<Profile> {
 
@@ -18,11 +19,11 @@ public class ProfileModelListener extends AbstractMongoEventListener<Profile> {
         this.sequenceGeneratorServiceProfile = sequenceGeneratorServiceProfile;
     }
 
-
     @Override
     public void onBeforeConvert(BeforeConvertEvent<Profile> event) {
         if (event.getSource().getId() < 1) {
             event.getSource().setId((int) sequenceGeneratorServiceProfile.generateSequence((Profile.getSequenceName())));
         }
     }
+
 }

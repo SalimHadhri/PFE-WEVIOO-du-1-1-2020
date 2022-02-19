@@ -5,8 +5,7 @@ import com.wsourcing.Services.Accounts.model.Account;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+//Repository referenced to our Account class
 @Repository
 public interface AccountRepository extends MongoRepository<Account,Integer> {
 

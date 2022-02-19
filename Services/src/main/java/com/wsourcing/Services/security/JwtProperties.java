@@ -1,11 +1,11 @@
 package com.wsourcing.Services.security;
 
-//properties that we will use to implement both authentication and authorization in JWT
-//single class for good practice
 
 import lombok.Getter;
 import lombok.ToString;
 
+//properties that we will use to implement both authentication and authorization in JWT
+//single class for good practice
 @Getter
 @ToString
 public class JwtProperties {

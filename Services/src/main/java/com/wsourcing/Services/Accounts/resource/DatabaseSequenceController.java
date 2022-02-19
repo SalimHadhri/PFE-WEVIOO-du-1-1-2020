@@ -5,6 +5,8 @@ import com.wsourcing.Services.Accounts.repository.DatabaseSequenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
+//Controller related to our DatabaseSequence class
 @CrossOrigin()
 @RestController
 @RequestMapping("/sequence")

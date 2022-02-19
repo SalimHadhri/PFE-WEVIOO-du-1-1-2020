@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+//Used for the auto-generate method developed above
+//Auto-generate long USER id is forbidden in MongoDB
 @Service
 public class SequenceGeneratorService {
 

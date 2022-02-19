@@ -3,13 +3,14 @@ package com.wsourcing.Authentication.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
+//Used to auto-generate User id with long type in the database
+//The Auto-generate id is forbidden in MongoDB
+//The id in MongoDB is a String type, type difficult to browse for complicated processing
 @Document(collection = "database_sequences_users")
 public class DatabaseSequence {
 
     @Id
     private String id;
-
     private long seq;
 
     public DatabaseSequence() {}
@@ -17,7 +18,6 @@ public class DatabaseSequence {
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -25,7 +25,6 @@ public class DatabaseSequence {
     public long getSeq() {
         return seq;
     }
-
     public void setSeq(long seq) {
         this.seq = seq;
     }
@@ -38,5 +37,6 @@ public class DatabaseSequence {
     public DatabaseSequence(long seq) {
         this.seq = seq;
     }
+
 }
 

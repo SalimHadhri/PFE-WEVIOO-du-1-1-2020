@@ -3,15 +3,15 @@ package com.wsourcing.Gateway.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//The credentials of our connected USER
 @Document(collection = "users")
 public class User {
 
-
+    //Used to auto-generate USER id with long type in the database
     @Transient
     public static final String SEQUENCE_NAME = "users_sequence";
 
@@ -29,14 +29,6 @@ public class User {
     private String roles = "";
 
     private String permissions = "";
-
-   /* public User(String username, String password, String roles, String permissions){
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
-        this.permissions = permissions;
-        this.active = 1;
-    }*/
 
     public User(String username, String password, int active, String roles, String permissions) {
         this.username = username;
@@ -125,8 +117,5 @@ public class User {
         }
         return new ArrayList<>();
     }
-
-
-
 
 }

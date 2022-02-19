@@ -1,13 +1,15 @@
 package com.wsourcing.Services.Profiles.model;
 
+
+//Education accomplishments through the candidate studies
 public class Education {
 
     private String name ;
-    private String  degree ;
+    private String degree ;
     private String grades ;
     private String field_of_study ;
     private String date_range ;
-    private String activities ;
+    private String getActivities ;
 
     public Education() {
     }

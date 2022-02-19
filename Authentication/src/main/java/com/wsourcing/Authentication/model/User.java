@@ -3,36 +3,29 @@ package com.wsourcing.Authentication.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.data.annotation.Transient;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+//The credentials of our connected User
 @Document(collection = "users")
 public class User {
 
-
+    //Used to auto-generate USER id with long type in the database
+    //mongodb id is a STRING type without auto-generate function
     @Transient
     public static final String SEQUENCE_NAME = "users_sequence";
 
-    // @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private long id;
-
     private String username;
-
     private String password;
-
     private int active;
 
     @JsonProperty("roles")
     private String roles = "";
-
     private String permissions = "";
-
-
 
     public User(String username, String password, int active, String roles, String permissions) {
         this.username = username;
@@ -63,7 +56,6 @@ public class User {
     public long getId() {
         return id;
     }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -71,7 +63,6 @@ public class User {
     public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -79,7 +70,6 @@ public class User {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -87,7 +77,6 @@ public class User {
     public int getActive() {
         return active;
     }
-
     public void setActive(int active) {
         this.active = active;
     }
@@ -95,7 +84,6 @@ public class User {
     public String getRoles() {
         return roles;
     }
-
     public void setRoles(String roles) {
         this.roles = roles;
     }
@@ -103,7 +91,6 @@ public class User {
     public String getPermissions() {
         return permissions;
     }
-
     public void setPermissions(String permissions) {
         this.permissions = permissions;
     }
@@ -121,8 +108,5 @@ public class User {
         }
         return new ArrayList<>();
     }
-
-
-
 
 }

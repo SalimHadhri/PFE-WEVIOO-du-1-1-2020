@@ -1,8 +1,7 @@
 package com.wsourcing.Services.Profiles.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
+//Work done throughout the candidate career
 public class Job {
 
     private String title ;
@@ -12,7 +11,6 @@ public class Job {
     private String description;
     private String li_company_url;
     private int  duration ;
-
     private Skill skills ;
 
     public Job(String title, String company, String date_range, String location, String description, String li_company_url, int duration, Skill skills) {

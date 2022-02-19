@@ -2,7 +2,6 @@ package com.wsourcing.Authentication.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-
 import com.wsourcing.Authentication.model.User;
 import com.wsourcing.Authentication.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,21 +10,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     //Use it to extract our UserDetails based on the username that we read from the token that we are going to receive
     //like authenticationFilter we need to extend some functionality to make authorization work for us
-    // dataset to have access to the authorization data
+    //dataset to have access to the authorization data
     private UserRepository userRepository ;
-
-
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
         super(authenticationManager);

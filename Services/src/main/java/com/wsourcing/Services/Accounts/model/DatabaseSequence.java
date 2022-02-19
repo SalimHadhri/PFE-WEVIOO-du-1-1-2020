@@ -3,7 +3,9 @@ package com.wsourcing.Services.Accounts.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
+//Used to auto-generate Account id with long type in the database
+//The Auto-generate id is forbidden in MongoDB
+//The id in MongoDB is a String type, type difficult to browse for complicated processing
 @Document(collection = "database_sequences_accounts")
 public class DatabaseSequence {
 

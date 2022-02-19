@@ -7,26 +7,32 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 
-
+//ACCOUNT : LINKDIN accounts used for scraping
 @Document(collection = "accounts")
-public class    Account {
+public class Account {
 
 
-
+    //Used to auto-generate Search id with long type in the database
+    //mongodb id is a STRING type without auto-generate function
     @Transient
     public static final String SEQUENCE_NAME = "accounts_sequence";
 
     @Id
     private long id ;
-
-    @Length(min=3,max=10,message = "ici votre message")
     private String name;
     private String email;
     private String url;
+    //unique kee which represent linkdin accounts
     private String liat;
+    //2 states : En Marche/En Arret
+    //represents the state of the account scraping or not
     private String etat;
+    //Maximum number scraping to be done this day
     private int nb_scraping_jour;
+    //Actual number scraping : number scraping to be done
     private int nb_scraping_actuel;
+    //true: nb_scraping_actuel == 0
+    //false: nb_scraping_actuel =< nb_scraping_jour && nb_scraping_actuel > 0
     private boolean liatExpired ;
 
 

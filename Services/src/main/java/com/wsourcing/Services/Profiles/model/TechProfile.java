@@ -1,5 +1,7 @@
 package com.wsourcing.Services.Profiles.model;
 
+
+//Force of the candidate profile gathering all of his experience detained through his career
 public class TechProfile {
     private float coef_skills ;
     private int  mean_duration;

@@ -1,5 +1,7 @@
 package com.wsourcing.Services.Profiles.model;
 
+
+//All features detained by the candidate
 public class NewFeature {
 
     private int mean_experiences ;
@@ -35,14 +37,14 @@ public class NewFeature {
     private float score_front_end ;
     private float score_embarqué_middleware ;
     private float score_technical_lead__architecte_jee;
-    private float     score_fullstack_js;
+    private float  score_fullstack_js;
     private float score_java_jee;
-    private float    score_php_symfony;
-    private float  score_drupal;
-    private float    score_product_owner;
+    private float score_php_symfony;
+    private float score_drupal;
+    private float  score_product_owner;
     private String final_best_profile ;
     private float final_best_profile_score;
-     private float       final_best_profile_mean_skills_duration;
+     private float final_best_profile_mean_skills_duration;
     private int final_best_profile_categ_seniority ;
 
 

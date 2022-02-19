@@ -3,6 +3,8 @@ package com.wsourcing.Services.Profiles.model;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//Experience detained by the candidate in therm of jobs, education and volunteering
 public class Experience {
 
     private List<Job> jobs ;

@@ -4,11 +4,15 @@ package com.wsourcing.Services.Searches.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+
+//Used to auto-generate Search id with long type in the database
+//The Auto-generate id is forbidden in MongoDB
+//The id in MongoDB is a String type, type difficult to browse for complicated processing */
 @Document(collection = "database_sequences_searches")
 public class DatabaseSequenceSearch {
+
     @Id
     private String id;
-
     private long seq;
 
     public DatabaseSequenceSearch() {}
