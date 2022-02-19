@@ -9,7 +9,7 @@ public class Education {
     private String grades ;
     private String field_of_study ;
     private String date_range ;
-    private String getActivities ;
+    private String activities ;
 
     public Education() {
     }
